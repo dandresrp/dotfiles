@@ -37,7 +37,7 @@ from libqtile.utils import guess_terminal
 mod = "mod4"
 terminal = guess_terminal()
 menu     = "dmenu_run"
-browser  = "google-chrome-stable"
+browser  = "firefox-developer-edition"
 files    = "nautilus"
 
 keys = [
@@ -117,13 +117,12 @@ for i in groups:
     ])
 
 layouts = [
-    layout.Columns(border_focus_stack='#d75f5f'),
-    layout.Max(),
-    # Try more layouts by unleashing below layouts.
+    # layout.Columns(border_focus_stack='#d75f5f', margin=4),
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.Matrix(),
-    # layout.MonadTall(),
+    layout.MonadTall(margin=4, border_focus='f4f4f4', single_border_width=0, single_margin=0),
+    layout.Max()
     # layout.MonadWide(),
     # layout.RatioTile(),
     # layout.Tile(),
@@ -141,11 +140,9 @@ extension_defaults = widget_defaults.copy()
 
 screens = [
     Screen(
-        bottom=bar.Bar(
+        top=bar.Bar(
             [
-                widget.CurrentLayout(),
                 widget.GroupBox(),
-                widget.Prompt(),
                 widget.WindowName(),
                 widget.Chord(
                     chords_colors={
@@ -153,11 +150,8 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-                widget.TextBox("default config", name="default"),
-                widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
                 widget.Systray(),
-                widget.Clock(format='%Y-%m-%d %a %I:%M %p'),
-                widget.QuickExit(),
+                widget.Clock(format="%c"),
             ],
             24,
         ),
@@ -191,9 +185,6 @@ floating_layout = layout.Floating(float_rules=[
 ])
 auto_fullscreen = True
 focus_on_window_activation = "smart"
-
-import os
-import subprocess
 
 @hook.subscribe.startup_once
 def autostart():
