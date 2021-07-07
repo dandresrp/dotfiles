@@ -121,7 +121,7 @@ layouts = [
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.Matrix(),
-    layout.MonadTall(margin=4, border_focus='f4f4f4', single_border_width=0, single_margin=0),
+    layout.MonadTall(margin=6, border_focus='f4f4f4', single_border_width=1, single_margin=4),
     layout.Max()
     # layout.MonadWide(),
     # layout.RatioTile(),
@@ -140,7 +140,7 @@ extension_defaults = widget_defaults.copy()
 
 screens = [
     Screen(
-        top=bar.Bar(
+        top=bar.Bar( 
             [
                 widget.GroupBox(),
                 widget.WindowName(),
@@ -154,7 +154,7 @@ screens = [
                 widget.Sep(padding=10),
                 widget.Volume(),
                 widget.Sep(padding=10),
-                widget.Clock(format="%c"),
+                widget.Clock(format="%A, %B %d | %I:%M %p"),
             ],
             24,
         ),
