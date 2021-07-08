@@ -8,12 +8,15 @@
 #### IMPORTS ######
 ###################
 
-from libqtile import hook
+
 from typing import List  # noqa: F401
 
 import os
+import re
+import socket
 import subprocess
-from libqtile import bar, layout, widget
+from libqtile import qtile
+from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
@@ -95,50 +98,59 @@ keys = [
 #### WORKSPACES ####
 ####################
 
-groups = [Group(i) for i in "123456789"]
+group_names = [("WWW", {'layout': 'monadtall'}),
+              ("DEV", {'layout': 'monadtall'}),
+              ("DOC", {'layout': 'monadtall'}),
+              ("CHAT", {'layout': 'monadtall'}),
+              ("MUS", {'layout': 'monadtall'})]
 
-for i in groups:
-    keys.extend([
-        # mod1 + letter of group = switch to group
-        Key([mod], i.name, lazy.group[i.name].toscreen(),
-            desc="Switch to group {}".format(i.name)),
+groups = [Group(name, **kwargs) for name, kwargs in group_names]
 
-        # mod1 + shift + letter of group = switch to & move focused window to group
-        Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=True),
-            desc="Switch to & move focused window to group {}".format(i.name)),
-        # Or, use below if you prefer not to switch to that group.
-        # # mod1 + shift + letter of group = move focused window to group
-        # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
-        #     desc="move focused window to group {}".format(i.name)),
-    ])
+for i, (name, kwargs) in enumerate(group_names, 1):
+    keys.append(Key([mod], str(i), lazy.group[name].toscreen()))
+    keys.append(Key([mod, "shift"], str(i), lazy.window.togroup(name)))
 
 #################
 #### LAYOUTS ####
 #################
 
+layout_theme = {"border_width": 2,
+                "margin": 8,
+                "border_focus": "e1acff",
+                "border_normal": "1D2330"}
+
 layouts = [
-    # layout.Columns(border_focus_stack='#d75f5f', margin=4),
-    # layout.Stack(num_stacks=2),
-    # layout.Bsp(),
-    # layout.Matrix(),
-    layout.MonadTall(margin=4, border_focus='f4f4f4', single_border_width=0, single_margin=0),
-    layout.Max()
-    # layout.MonadWide(),
-    # layout.RatioTile(),
-    # layout.Tile(),
-    # layout.TreeTab(),
-    # layout.VerticalTile(),
-    # layout.Zoomy(),
-]
+    #layout.MonadWide(**layout_theme),
+    #layout.Bsp(**layout_theme),
+    #layout.Stack(stacks=2, **layout_theme),
+    #layout.Columns(**layout_theme),
+    #layout.RatioTile(**layout_theme),
+    #layout.Tile(shift_windows=True, **layout_theme),
+    #layout.VerticalTile(**layout_theme),
+    #layout.Matrix(**layout_theme),
+    #layout.Zoomy(**layout_theme),
+     layout.MonadTall(**layout_theme),
+     layout.Max(**layout_theme),
+     layout.Stack(num_stacks=2),
+     layout.RatioTile(**layout_theme),
+     layout.Floating(**layout_theme)]
+
+# Drag floating layouts.
+mouse = [
+    Drag([mod], "Button1", lazy.window.set_position_floating(),
+         start=lazy.window.get_position()),
+    Drag([mod], "Button3", lazy.window.set_size_floating(),
+         start=lazy.window.get_size()),
+    Click([mod], "Button2", lazy.window.bring_to_front())                ]
 
 #######################
 #### BAR & WIDGETS ####
 #######################
 
 widget_defaults = dict(
-    font='sans',
-    fontsize=12,
-    padding=3,
+    font='Cantarell',
+    fontsize=14,
+    padding=4,
 )
 extension_defaults = widget_defaults.copy()
 
@@ -154,24 +166,17 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-                widget.Systray(),
-                widget.Sep(padding=10),
-                widget.Volume(),
-                widget.Sep(padding=10),
-                widget.Clock(format="%A, %B %d | %I:%M %p"),
-            ],
-            24,
+                widget.Systray(padding=10),
+                widget.Sep(),
+                widget.Volume(padding=10),
+                widget.Sep(),
+                widget.Clock(format="%d/%m/%Y | %I:%M %p", padding=10),
+               ],
+            28,
+            background="#282a36",
+            foreground="#f8f8f2",
         ),
     ),
-]
-
-# Drag floating layouts.
-mouse = [
-    Drag([mod], "Button1", lazy.window.set_position_floating(),
-         start=lazy.window.get_position()),
-    Drag([mod], "Button3", lazy.window.set_size_floating(),
-         start=lazy.window.get_size()),
-    Click([mod], "Button2", lazy.window.bring_to_front())
 ]
 
 dgroups_key_binder = None

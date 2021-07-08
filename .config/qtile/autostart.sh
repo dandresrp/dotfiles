@@ -2,6 +2,5 @@
 
 picom &
 nitrogen --restore &
-numlockx &
-dropbox &
+numlockx & 
 setxkbmap us -variant altgr-intl
