@@ -108,4 +108,3 @@ alias src="source ~/.zshrc | clear"
 ### STARSHIP PROMPT ###
 eval "$(starship init zsh)"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
