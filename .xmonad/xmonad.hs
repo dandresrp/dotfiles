@@ -3,9 +3,11 @@
 import XMonad
 import Data.Monoid
 import System.Exit
+import XMonad.Layout.Spacing
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
 import XMonad.Hooks.ManageDocks
+import Graphics.X11.ExtraTypes.XF86
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
@@ -24,7 +26,7 @@ myClickJustFocuses = False
 
 -- Width of the window border in pixels.
 --
-myBorderWidth   = 2
+myBorderWidth   = 1
 
 -- modMask lets you specify which modkey you want to use. The default
 -- is mod1Mask ("left alt").  You may also consider using mod3Mask
@@ -58,19 +60,27 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
 
     -- launch dmenu
-    --, ((modm,               xK_p     ), spawn "dmenu_run")
+    , ((modm,               xK_p     ), spawn "dmenu_run")
     
     -- launch rofi
-    , ((modm,               xK_p     ), spawn "rofi -show drun")
+    --, ((modm,               xK_p     ), spawn "rofi -show drun")
 
     -- launch gmrun
     , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
 
+    -- Volume Keys
+    , ((0, xF86XK_AudioRaiseVolume),  spawn "amixer -D pulse sset Master 10%+")
+    , ((0, xF86XK_AudioLowerVolume),  spawn "amixer -D pulse sset Master 10%-")
+    , ((0, xF86XK_AudioMute),         spawn "amixer -D pulse sset Master toggle")
+
     -- launch Browser
-    , ((modm,               xK_b     ), spawn "firefox-developer-edition")
+    , ((modm,               xK_b     ), spawn "google-chrome-stable")
 
     -- launch File Manager
-    , ((modm,               xK_f     ), spawn "nautilus")
+    , ((modm,               xK_f     ), spawn "pcmanfm")
+
+    -- launch Screenshot Tool
+    , ((modm .|. shiftMask, xK_s     ), spawn "flameshot gui")
 
     -- close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
@@ -185,7 +195,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayout = avoidStruts (tiled ||| Mirror tiled ||| Full)
+myLayout = avoidStruts $ smartSpacing 4 (tiled ||| Mirror tiled ||| Full)
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = Tall nmaster delta ratio
@@ -248,6 +258,7 @@ myLogHook = return ()
 --
 -- By default, do nothing.
 myStartupHook = do
+	spawnOnce "lxsession &"
 	spawnOnce "nitrogen --restore &"
 	spawnOnce "picom &"
 	spawnOnce "numlockx &"

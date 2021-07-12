@@ -24,6 +24,6 @@ Config { font = "xft:Ubuntu Mono:pixelsize=14:antialias=true:hinting=true"
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%cpu% | %memory% * %swap% }\
+       , template = " %cpu% | %memory% * %swap% }\
                     \{ <fc=#f1fa8c>%date%</fc> | XMonad "
        }
