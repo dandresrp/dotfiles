@@ -7,7 +7,7 @@ sudo firewall-cmd --add-port=1025-65535/tcp --permanent
 sudo firewall-cmd --add-port=1025-65535/udp --permanent
 sudo firewall-cmd --reload
 
-sudo pacman -S --noconfirm xorg sddm plasma kde-applications firefox vlc discord papirus-icon-theme libreoffice-fresh anki gimp mlocate noto-fonts-emoji hunspell-en_us hunspell-es_any hunspell-es_hn hunspell-es_mx hunspell-es_es materia-kde
+sudo pacman -S --noconfirm xorg sddm plasma kde-applications firefox vlc discord papirus-icon-theme libreoffice-fresh anki gimp mlocate noto-fonts-emoji hunspell-en_us hunspell-es_any hunspell-es_hn hunspell-es_mx hunspell-es_es exa bat fish packagekit-qt5
 
 git clone https://aur.archlinux.org/paru.git
 cd paru/
