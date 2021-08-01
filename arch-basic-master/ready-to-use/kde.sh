@@ -16,7 +16,7 @@ makepkg -si --noconfirm
 curl -sS https://download.spotify.com/debian/pubkey_0D811D58.gpg | gpg --import -
 curl -sS https://linux.dropbox.com/fedora/rpm-public-key.asc | gpg --import -
 
-paru -S --noconfirm google-chrome visual-studio-code-bin ttf-ms-fonts zoom spotify dropbox notion-app
+paru -S --noconfirm google-chrome visual-studio-code-bin ttf-ms-fonts zoom spotify dropbox notion-app timeshift freedownloadmanager
 
 sudo systemctl enable sddm
 
