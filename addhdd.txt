@@ -1,4 +1,0 @@
-### Add this line to /etc/fstab, this will mount the second HDD with the correct permissions.
-
-# /dev/sdb1
-UUID=D0AE0D3BAE0D1C1A   /mnt/Data       ntfs    rw,auto,user,fmask=133,dmask=022,uid=1000,gid=1000 0 0
