@@ -6,7 +6,7 @@ sudo firewall-cmd --add-port=1025-65535/tcp --permanent
 sudo firewall-cmd --add-port=1025-65535/udp --permanent
 sudo firewall-cmd --reload
 
-sudo pacman -S xorg xorg-xinit awesome lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings vlc discord nitrogen picom rofi dmenu alacritty pcmanfm libreoffice-fresh numlockx anki gimp notepadqq lxappearance mlocate gvfs udisks2 xterm polkit lxsession noto-fonts-emoji hunspell-en_us hunspell-es_any hunspell-es_hn hunspell-es_mx hunspell-es_es firefox papirus-icon-theme exa bat fish nomacs flameshot neofetch
+sudo pacman -S xorg xorg-xinit awesome lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings vlc discord nitrogen picom rofi dmenu alacritty pcmanfm libreoffice-fresh numlockx anki gimp notepadqq lxappearance mlocate gvfs udisks2 xterm polkit lxsession noto-fonts-emoji hunspell-en_us hunspell-es_any hunspell-es_hn hunspell-es_mx hunspell-es_es firefox papirus-icon-theme exa bat fish nomacs neofetch pavucontrol playerctl dunst gnome-disk-utility volumeicon
 
 sh -c "$(curl -fsSL https://starship.rs/install.sh)"
 
