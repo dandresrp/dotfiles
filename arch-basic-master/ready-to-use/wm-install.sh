@@ -2,12 +2,12 @@
 
 sudo pacman -Syy
 
-#sudo firewall-cmd --add-port=1025-65535/tcp --permanent
-#sudo firewall-cmd --add-port=1025-65535/udp --permanent
-#sudo firewall-cmd --reload
+sudo firewall-cmd --add-port=1025-65535/tcp --permanent
+sudo firewall-cmd --add-port=1025-65535/udp --permanent
+sudo firewall-cmd --reload
 
 ### Essential Packages every standalone window manager needs
-sudo pacman -S xorg xorg-xinit lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings nitrogen picom rofi dmenu alacritty pcmanfm numlockx lxappearance mlocate gvfs udisks2 xterm polkit lxsession exa bat fish neofetch pavucontrol notepadqq nomacs gnome-disk-utility htop
+sudo pacman -S xorg xorg-xinit lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings nitrogen picom rofi dmenu alacritty pcmanfm numlockx lxappearance mlocate gvfs udisks2 xterm polkit lxsession exa bat fish neofetch pavucontrol howl nomacs gnome-disk-utility htop
 
 ### Window Manager - Choose one to install
 #sudo pacman -S qtile
@@ -29,6 +29,7 @@ sudo pacman -S materia-gtk-theme
 ### Install starship prompt
 #sh -c "$(curl -fsSL https://starship.rs/install.sh)"
 
+cd ~
 git clone https://aur.archlinux.org/paru.git
 cd paru/
 makepkg -si --noconfirm
