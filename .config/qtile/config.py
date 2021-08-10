@@ -28,8 +28,8 @@ from libqtile.utils import guess_terminal
 mod = "mod4"
 terminal = guess_terminal()
 applauncher     = "rofi -show drun"
-browser  = "firefox-developer-edition"
-files    = "nautilus"
+browser  = "google-chrome-stable"
+files    = "pcmanfm"
 
 #####################
 #### KEYBINDINGS ####
@@ -38,9 +38,10 @@ files    = "nautilus"
 keys = [
 
     # Launch 
-    Key([mod], "p", lazy.spawn(applauncher)),
-    Key([mod], "b", lazy.spawn(browser)),
-    Key([mod], "f", lazy.spawn(files)),
+    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
+    Key([mod], "p", lazy.spawn(applauncher), desc="Launch rofi"),
+    Key([mod], "b", lazy.spawn(browser), desc="Launch browser"),
+    Key([mod], "e", lazy.spawn(files), desc="Launch file manager"),
 
     # Switch between windows
     Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
@@ -77,11 +78,10 @@ keys = [
     # multiple stack panes
     Key([mod, "shift"], "Return", lazy.layout.toggle_split(),
         desc="Toggle between split and unsplit sides of stack"),
-    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
 
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-    Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
+    Key([mod, "shift"], "c", lazy.window.kill(), desc="Kill focused window"),
 
     Key([mod, "control"], "r", lazy.restart(), desc="Restart Qtile"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
@@ -90,8 +90,8 @@ keys = [
 
     # Sound
         Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle")),
-        Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -q -D pulse sset Master 2%-")),
-        Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer -q -D pulse sset Master 2%+"))
+        Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -q -D pulse sset Master 5%-")),
+        Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer -q -D pulse sset Master 5%+"))
 ]
 
 ####################
@@ -115,9 +115,9 @@ for i, (name, kwargs) in enumerate(group_names, 1):
 #################
 
 layout_theme = {"border_width": 2,
-                "margin": 8,
-                "border_focus": "e1acff",
-                "border_normal": "1D2330"}
+                "margin": 4,
+                "border_focus": "999",
+                "border_normal": "333"}
 
 layouts = [
     #layout.MonadWide(**layout_theme),

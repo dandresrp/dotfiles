@@ -4,6 +4,7 @@ import XMonad
 import Data.Monoid
 import System.Exit
 import XMonad.Layout.Spacing
+import XMonad.Layout.NoBorders
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
 import XMonad.Hooks.ManageDocks
@@ -11,10 +12,11 @@ import Graphics.X11.ExtraTypes.XF86
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
--- The preferred terminal program, which is used in a binding below and by
--- certain contrib modules.
---
+-- Preferred applications
 myTerminal      = "alacritty"
+myBrowser	= "google-chrome-stable"
+myLauncher	= "rofi -show drun"
+myFileManager	= "pcmanfm"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
@@ -48,8 +50,8 @@ myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
 
 -- Border colors for unfocused and focused windows, respectively.
 --
-myNormalBorderColor  = "#f8f8f2"
-myFocusedBorderColor = "#bd93f9"
+myNormalBorderColor  = "#333"
+myFocusedBorderColor = "#999"
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
@@ -59,28 +61,22 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch a terminal
     [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
 
-    -- launch dmenu
-    , ((modm,               xK_p     ), spawn "dmenu_run")
-    
-    -- launch rofi
-    --, ((modm,               xK_p     ), spawn "rofi -show drun")
+    -- launch launcher
+    , ((modm,               xK_p     ), spawn myLauncher)
 
-    -- launch gmrun
-    , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
+    -- launch file manager
+    , ((modm,               xK_f     ), spawn myFileManager)
+
+    -- launch browser
+    , ((modm,               xK_b     ), spawn myBrowser)
+
+    -- launch screenshot tool
+    , ((modm .|. shiftMask, xK_s     ), spawn "flameshot gui")
 
     -- Volume Keys
     , ((0, xF86XK_AudioRaiseVolume),  spawn "amixer -D pulse sset Master 10%+")
     , ((0, xF86XK_AudioLowerVolume),  spawn "amixer -D pulse sset Master 10%-")
     , ((0, xF86XK_AudioMute),         spawn "amixer -D pulse sset Master toggle")
-
-    -- launch Browser
-    , ((modm,               xK_b     ), spawn "google-chrome-stable")
-
-    -- launch File Manager
-    , ((modm,               xK_f     ), spawn "pcmanfm")
-
-    -- launch Screenshot Tool
-    , ((modm .|. shiftMask, xK_s     ), spawn "flameshot gui")
 
     -- close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
@@ -140,7 +136,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
 
     -- Restart xmonad
-    , ((modm              , xK_q     ), spawn "xmonad --recompile; xmonad --restart")
+    , ((modm              , xK_q     ), spawn "xmonad --recompile; killall xmobar; xmonad --restart")
 
     -- Run xmessage with a summary of the default keybindings (useful for beginners)
     , ((modm .|. shiftMask, xK_slash ), spawn ("echo \"" ++ help ++ "\" | xmessage -file -"))
@@ -195,10 +191,10 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayout = avoidStruts $ smartSpacing 4 (tiled ||| Mirror tiled ||| Full)
+myLayout = (tiled ||| smartBorders Full)
   where
      -- default tiling algorithm partitions the screen into two panes
-     tiled   = Tall nmaster delta ratio
+     tiled   = avoidStruts $ smartBorders $ smartSpacing 4 $ Tall nmaster delta ratio
 
      -- The default number of windows in the master pane
      nmaster = 1
@@ -263,13 +259,14 @@ myStartupHook = do
 	spawnOnce "picom &"
 	spawnOnce "numlockx &"
 	spawnOnce "setxkbmap us -variant altgr-intl"
+	spawnOnce "pcmanfm -d &"
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
 
 -- Run xmonad with the settings you specify. No need to modify this.
 --
-main = do 
+main = do
     xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"
     xmonad $ docks defaults
 
