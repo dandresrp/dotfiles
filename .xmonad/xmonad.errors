@@ -1,6 +1,6 @@
 
 xmonad.hs:17:10: warning: [-Wtabs]
-    Tab character found here, and in 8 further locations.
+    Tab character found here, and in 9 further locations.
     Please use spaces instead.
    |
 17 | myBrowser       = "google-chrome-stable"
@@ -10,5 +10,5 @@ xmonad.hs:197:45: warning: [-Wdeprecations]
     In the use of ‘smartSpacing’ (imported from XMonad.Layout.Spacing):
     Deprecated: "Use spacingRaw instead."
     |
-197 |      tiled   = avoidStruts $ smartBorders $ smartSpacing 4 $ Tall nmaster delta ratio
+197 |      tiled   = avoidStruts $ smartBorders $ smartSpacing 4 $ Tall nmaster delta ratio 
     |                                             ^^^^^^^^^^^^

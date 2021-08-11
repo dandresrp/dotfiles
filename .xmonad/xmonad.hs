@@ -15,7 +15,7 @@ import qualified Data.Map        as M
 -- Preferred applications
 myTerminal      = "alacritty"
 myBrowser	= "google-chrome-stable"
-myLauncher	= "rofi -show drun"
+myLauncher	= "$HOME/.config/rofi/launchers/colorful/launcher.sh"
 myFileManager	= "pcmanfm"
 
 -- Whether focus follows the mouse pointer.
@@ -194,7 +194,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 myLayout = (tiled ||| smartBorders Full)
   where
      -- default tiling algorithm partitions the screen into two panes
-     tiled   = avoidStruts $ smartBorders $ smartSpacing 4 $ Tall nmaster delta ratio
+     tiled   = avoidStruts $ smartBorders $ smartSpacing 4 $ Tall nmaster delta ratio 
 
      -- The default number of windows in the master pane
      nmaster = 1
@@ -256,7 +256,7 @@ myLogHook = return ()
 myStartupHook = do
 	spawnOnce "lxsession &"
 	spawnOnce "nitrogen --restore &"
-	spawnOnce "picom &"
+	spawnOnce "picom --config ~/.config/picom.conf &"
 	spawnOnce "numlockx &"
 	spawnOnce "setxkbmap us -variant altgr-intl"
 	spawnOnce "pcmanfm -d &"
