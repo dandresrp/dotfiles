@@ -16,6 +16,7 @@ import qualified Data.Map        as M
 myTerminal      = "alacritty"
 myBrowser	= "google-chrome-stable"
 myLauncher	= "$HOME/.config/rofi/launchers/colorful/launcher.sh"
+myPowerMenu	= "$HOME/.config/rofi/powermenu/powermenu.sh"
 myFileManager	= "pcmanfm"
 
 -- Whether focus follows the mouse pointer.
@@ -63,6 +64,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- launch launcher
     , ((modm,               xK_p     ), spawn myLauncher)
+
+    -- launch powermenu
+    --, ((modm .|. shiftMask, xK_q     ), spawn myPowerMenu)
 
     -- launch file manager
     , ((modm,               xK_f     ), spawn myFileManager)
@@ -191,10 +195,10 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayout = (tiled ||| smartBorders Full)
+myLayout =  (tiled ||| smartBorders Full)
   where
      -- default tiling algorithm partitions the screen into two panes
-     tiled   = avoidStruts $ smartBorders $ smartSpacing 4 $ Tall nmaster delta ratio 
+     tiled   = avoidStruts $ smartBorders $ smartSpacing 8 $ Tall nmaster delta ratio 
 
      -- The default number of windows in the master pane
      nmaster = 1

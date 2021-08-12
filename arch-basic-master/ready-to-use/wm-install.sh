@@ -7,7 +7,7 @@ sudo firewall-cmd --add-port=1025-65535/udp --permanent
 sudo firewall-cmd --reload
 
 ### Essential Packages every standalone window manager needs
-sudo pacman -S xorg xorg-xinit lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings nitrogen picom rofi dmenu alacritty pcmanfm numlockx lxappearance mlocate gvfs udisks2 xterm polkit lxsession exa bat fish neofetch pavucontrol howl nomacs gnome-disk-utility htop
+sudo pacman -S xorg xorg-xinit lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings nitrogen picom rofi dmenu alacritty pcmanfm numlockx lxappearance mlocate gvfs udisks2 xterm polkit lxsession exa bat fish neofetch pavucontrol howl nomacs gnome-disk-utility htop file-roller
 
 ### Window Manager - Choose one to install
 #sudo pacman -S qtile

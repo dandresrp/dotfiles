@@ -6,9 +6,9 @@ xmonad.hs:17:10: warning: [-Wtabs]
 17 | myBrowser       = "google-chrome-stable"
    |          ^^^^^^^
 
-xmonad.hs:197:45: warning: [-Wdeprecations]
+xmonad.hs:201:45: warning: [-Wdeprecations]
     In the use of ‘smartSpacing’ (imported from XMonad.Layout.Spacing):
     Deprecated: "Use spacingRaw instead."
     |
-197 |      tiled   = avoidStruts $ smartBorders $ smartSpacing 4 $ Tall nmaster delta ratio 
+201 |      tiled   = avoidStruts $ smartBorders $ smartSpacing 8 $ Tall nmaster delta ratio 
     |                                             ^^^^^^^^^^^^
