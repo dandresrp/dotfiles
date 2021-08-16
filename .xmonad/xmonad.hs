@@ -15,9 +15,8 @@ import qualified Data.Map        as M
 -- Preferred applications
 myTerminal      = "alacritty"
 myBrowser	= "google-chrome-stable"
-myLauncher	= "$HOME/.config/rofi/launchers/colorful/launcher.sh"
-myPowerMenu	= "$HOME/.config/rofi/powermenu/powermenu.sh"
-myFileManager	= "pcmanfm"
+myLauncher   = "rofi -show drun"
+myFileManager	= "Thunar"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
@@ -198,7 +197,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 myLayout =  (tiled ||| smartBorders Full)
   where
      -- default tiling algorithm partitions the screen into two panes
-     tiled   = avoidStruts $ smartBorders $ smartSpacing 8 $ Tall nmaster delta ratio 
+     tiled   = avoidStruts $ smartBorders $ smartSpacing 4 $ Tall nmaster delta ratio 
 
      -- The default number of windows in the master pane
      nmaster = 1
@@ -263,7 +262,7 @@ myStartupHook = do
 	spawnOnce "picom --config ~/.config/picom.conf &"
 	spawnOnce "numlockx &"
 	spawnOnce "setxkbmap us -variant altgr-intl"
-	spawnOnce "pcmanfm -d &"
+	spawnOnce "thunar --daemon &"
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
