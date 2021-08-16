@@ -5,6 +5,7 @@ set -U fish_user_paths $HOME/.local/bin $HOME/Applications $fish_user_paths
 ### EXPORT ###
 set fish_greeting
 set TERM "xterm-256color"
+export EDITOR='subl'
 
 if status is-interactive
     # Commands to run in interactive sessions can go here
@@ -48,7 +49,36 @@ alias yta-wav="youtube-dl --extract-audio --audio-format wav "
 alias ytv-best="youtube-dl -f bestvideo+bestaudio "
 
 # mirrors
-alias mirrors="sudo reflector --country 'United States' --sort rate --age 12 --protocol https --save /etc/pacman.d/mirrorlist"
+alias mirrors-mine="sudo reflector --country 'United States' --sort rate --age 12 --protocol https --save /etc/pacman.d/mirrorlist"
+alias mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
+alias mirrord="sudo reflector --latest 30 --number 10 --sort delay --save /etc/pacman.d/mirrorlist"
+alias mirrors="sudo reflector --latest 30 --number 10 --sort score --save /etc/pacman.d/mirrorlist"
+alias mirrora="sudo reflector --latest 30 --number 10 --sort age --save /etc/pacman.d/mirrorlist"
+#our experimental - best option for the moment
+alias mirrorx="sudo reflector --age 6 --latest 20  --fastest 20 --threads 5 --sort rate --protocol https --save /etc/pacman.d/mirrorlist"
+alias mirrorxx="sudo reflector --age 6 --latest 20  --fastest 20 --threads 20 --sort rate --protocol https --save /etc/pacman.d/mirrorlist"
+
+# grub update
+alias update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
+
+# edit config files
+alias elightdm="sudo $EDITOR /etc/lightdm/lightdm.conf && exit"
+alias epacman="sudo $EDITOR /etc/pacman.conf && exit"
+alias egrub="sudo $EDITOR /etc/default/grub && exit"
+alias emkinitcpio="sudo $EDITOR /etc/mkinitcpio.conf && exit"
+alias emirrorlist="sudo $EDITOR /etc/pacman.d/mirrorlist && exit"
+alias esddm="sudo $EDITOR /etc/sddm.conf && exit"
+alias efstab="sudo $EDITOR /etc/fstab && exit"
+alias erofi="sudo $EDITOR ~/.config/rofi/config.rasi && exit"
+alias exmonad="sudo $EDITOR ~/.xmonad/xmonad.hs && exit"
+alias exmobar="sudo $EDITOR ~/.config/xmobar/xmobarrc && exit"
+alias eawesome="sudo $EDITOR ~/.config/awesome/rc.lua && exit"
+alias eb="$EDITOR ~/.bashrc && exit"
+alias ef="$EDITOR ~/.config/fish/config.fish && exit"
+
+# shutdown or reboot
+alias ssn="sudo shutdown now"
+alias sr="sudo reboot"
 
 ### SETTING THE STARSHIP PROMPT ###
 starship init fish | source
