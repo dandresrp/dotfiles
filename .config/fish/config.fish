@@ -32,11 +32,11 @@ alias clt='clear && lt'
 alias cl.='clear && l.'
 
 # pacman
-alias install='sudo pacman -S'
-alias remove='sudo pacman -R'
-alias fullremove='sudo pacman -Rcns'
-alias update='sudo pacman -Syy'
-alias upgrade='sudo pacman -Syu'
+alias inst='sudo pacman -S'
+alias rem='sudo pacman -R'
+alias frem='sudo pacman -Rcns'
+alias up='sudo pacman -Syy'
+alias upg='sudo pacman -Syu'
 alias unlock='sudo rm /var/lib/pacman/db.lck'
 alias cleanup='sudo pacman -Rns (pacman -Qtdq)'
 
@@ -64,14 +64,7 @@ alias yta-wav="youtube-dl --extract-audio --audio-format wav "
 alias ytv-best="youtube-dl -f bestvideo+bestaudio "
 
 # mirrors
-alias mirrors-mine="sudo reflector --country 'United States' --sort rate --age 12 --protocol https --save /etc/pacman.d/mirrorlist"
-alias mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
-alias mirrord="sudo reflector --latest 30 --number 10 --sort delay --save /etc/pacman.d/mirrorlist"
-alias mirrors="sudo reflector --latest 30 --number 10 --sort score --save /etc/pacman.d/mirrorlist"
-alias mirrora="sudo reflector --latest 30 --number 10 --sort age --save /etc/pacman.d/mirrorlist"
-#our experimental - best option for the moment
-alias mirrorx="sudo reflector --age 6 --latest 20  --fastest 20 --threads 5 --sort rate --protocol https --save /etc/pacman.d/mirrorlist"
-alias mirrorxx="sudo reflector --age 6 --latest 20  --fastest 20 --threads 20 --sort rate --protocol https --save /etc/pacman.d/mirrorlist"
+alias mirrors="sudo reflector --country 'United States' --sort rate --age 12 --protocol https --save /etc/pacman.d/mirrorlist"
 
 # grub update
 alias update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
@@ -88,21 +81,23 @@ alias vrofi="sudo $EDITOR ~/.config/rofi/config.rasi"
 alias vxmonad="sudo $EDITOR ~/.xmonad/xmonad.hs"
 alias vxmobar="sudo $EDITOR ~/.config/xmobar/xmobarrc"
 alias vawesome="sudo $EDITOR ~/.config/awesome/rc.lua"
+alias valacritty="sudo $EDITOR ~/.config/alacritty/alacritty.yml"
 alias vb="$EDITOR ~/.bashrc"
 alias vf="$EDITOR ~/.config/fish/config.fish"
 
 # edit config files with SUBLIME
-alias slightdm="sudo $EDITOR2 /etc/lightdm/lightdm.conf && exit"
-alias spacman="sudo $EDITOR2 /etc/pacman.conf && exit"
-alias sgrub="sudo $EDITOR2 /etc/default/grub && exit"
-alias smkinitcpio="sudo $EDITOR2 /etc/mkinitcpio.conf && exit"
-alias smirrorlist="sudo $EDITOR2 /etc/pacman.d/mirrorlist && exit"
-alias ssddm="sudo $EDITOR2 /etc/sddm.conf && exit"
-alias sfstab="sudo $EDITOR2 /etc/fstab && exit"
-alias srofi="sudo $EDITOR2 ~/.config/rofi/config.rasi && exit"
-alias sxmonad="sudo $EDITOR2 ~/.xmonad/xmonad.hs && exit"
-alias sxmobar="sudo $EDITOR2 ~/.config/xmobar/xmobarrc && exit"
-alias sawesome="sudo $EDITOR2 ~/.config/awesome/rc.lua && exit"
+alias slightdm="$EDITOR2 /etc/lightdm/lightdm.conf && exit"
+alias spacman="$EDITOR2 /etc/pacman.conf && exit"
+alias sgrub="$EDITOR2 /etc/default/grub && exit"
+alias smkinitcpio="$EDITOR2 /etc/mkinitcpio.conf && exit"
+alias smirrorlist="$EDITOR2 /etc/pacman.d/mirrorlist && exit"
+alias ssddm="$EDITOR2 /etc/sddm.conf && exit"
+alias sfstab="$EDITOR2 /etc/fstab && exit"
+alias srofi="$EDITOR2 ~/.config/rofi/config.rasi && exit"
+alias sxmonad="$EDITOR2 ~/.xmonad/xmonad.hs && exit"
+alias sxmobar="$EDITOR2 ~/.config/xmobar/xmobarrc && exit"
+alias sawesome="$EDITOR2 ~/.config/awesome/rc.lua && exit"
+alias salacritty="$EDITOR2 ~/.config/alacritty/alacritty.yml && exit"
 alias sb="$EDITOR2 ~/.bashrc && exit"
 alias sf="$EDITOR2 ~/.config/fish/config.fish && exit"
 
