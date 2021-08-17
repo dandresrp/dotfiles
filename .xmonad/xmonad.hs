@@ -257,7 +257,7 @@ myLogHook = return ()
 --
 -- By default, do nothing.
 myStartupHook = do
-	spawnOnce "lxsession &"
+	spawnOnce "xfsettingsd &"
 	spawnOnce "nitrogen --restore &"
 	spawnOnce "picom --config ~/.config/picom.conf &"
 	spawnOnce "numlockx &"
