@@ -5,7 +5,8 @@ set -U fish_user_paths $HOME/.local/bin $HOME/Applications $fish_user_paths
 ### EXPORT ###
 set fish_greeting
 set TERM "xterm-256color"
-export EDITOR='subl'
+export EDITOR='vim'
+export EDITOR2='subl'
 
 if status is-interactive
     # Commands to run in interactive sessions can go here
@@ -23,6 +24,13 @@ alias ll='exa -l --color=always --group-directories-first'  # long format
 alias lt='exa -aT --color=always --group-directories-first' # tree listing
 alias l.='exa -a | egrep "^\."'
 
+# Add clear to ls
+alias cls='clear && ls'
+alias cla='clear && la'  
+alias cll='clear && ll'
+alias clt='clear && lt'
+alias cl.='clear && l.'
+
 # pacman
 alias install='sudo pacman -S'
 alias remove='sudo pacman -R'
@@ -31,6 +39,13 @@ alias update='sudo pacman -Syy'
 alias upgrade='sudo pacman -Syu'
 alias unlock='sudo rm /var/lib/pacman/db.lck'
 alias cleanup='sudo pacman -Rns (pacman -Qtdq)'
+
+# git
+
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit -m'
+alias gp='git push origin main'
 
 # Colorize grep output (good for log files)
 alias grep='grep --color=auto'
@@ -61,20 +76,35 @@ alias mirrorxx="sudo reflector --age 6 --latest 20  --fastest 20 --threads 20 --
 # grub update
 alias update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
 
-# edit config files
-alias elightdm="sudo $EDITOR /etc/lightdm/lightdm.conf && exit"
-alias epacman="sudo $EDITOR /etc/pacman.conf && exit"
-alias egrub="sudo $EDITOR /etc/default/grub && exit"
-alias emkinitcpio="sudo $EDITOR /etc/mkinitcpio.conf && exit"
-alias emirrorlist="sudo $EDITOR /etc/pacman.d/mirrorlist && exit"
-alias esddm="sudo $EDITOR /etc/sddm.conf && exit"
-alias efstab="sudo $EDITOR /etc/fstab && exit"
-alias erofi="sudo $EDITOR ~/.config/rofi/config.rasi && exit"
-alias exmonad="sudo $EDITOR ~/.xmonad/xmonad.hs && exit"
-alias exmobar="sudo $EDITOR ~/.config/xmobar/xmobarrc && exit"
-alias eawesome="sudo $EDITOR ~/.config/awesome/rc.lua && exit"
-alias eb="$EDITOR ~/.bashrc && exit"
-alias ef="$EDITOR ~/.config/fish/config.fish && exit"
+# edit config files with VIM
+alias vlightdm="sudo $EDITOR /etc/lightdm/lightdm.conf"
+alias vpacman="sudo $EDITOR /etc/pacman.conf"
+alias vgrub="sudo $EDITOR /etc/default/grub"
+alias vmkinitcpio="sudo $EDITOR /etc/mkinitcpio.conf"
+alias vmirrorlist="sudo $EDITOR /etc/pacman.d/mirrorlist"
+alias vsddm="sudo $EDITOR /etc/sddm.conf"
+alias vfstab="sudo $EDITOR /etc/fstab"
+alias vrofi="sudo $EDITOR ~/.config/rofi/config.rasi"
+alias vxmonad="sudo $EDITOR ~/.xmonad/xmonad.hs"
+alias vxmobar="sudo $EDITOR ~/.config/xmobar/xmobarrc"
+alias vawesome="sudo $EDITOR ~/.config/awesome/rc.lua"
+alias vb="$EDITOR ~/.bashrc"
+alias vf="$EDITOR ~/.config/fish/config.fish"
+
+# edit config files with SUBLIME
+alias slightdm="sudo $EDITOR2 /etc/lightdm/lightdm.conf && exit"
+alias spacman="sudo $EDITOR2 /etc/pacman.conf && exit"
+alias sgrub="sudo $EDITOR2 /etc/default/grub && exit"
+alias smkinitcpio="sudo $EDITOR2 /etc/mkinitcpio.conf && exit"
+alias smirrorlist="sudo $EDITOR2 /etc/pacman.d/mirrorlist && exit"
+alias ssddm="sudo $EDITOR2 /etc/sddm.conf && exit"
+alias sfstab="sudo $EDITOR2 /etc/fstab && exit"
+alias srofi="sudo $EDITOR2 ~/.config/rofi/config.rasi && exit"
+alias sxmonad="sudo $EDITOR2 ~/.xmonad/xmonad.hs && exit"
+alias sxmobar="sudo $EDITOR2 ~/.config/xmobar/xmobarrc && exit"
+alias sawesome="sudo $EDITOR2 ~/.config/awesome/rc.lua && exit"
+alias sb="$EDITOR2 ~/.bashrc && exit"
+alias sf="$EDITOR2 ~/.config/fish/config.fish && exit"
 
 # shutdown or reboot
 alias ssn="sudo shutdown now"
