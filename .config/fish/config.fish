@@ -32,16 +32,15 @@ alias clt='clear && lt'
 alias cl.='clear && l.'
 
 # pacman
-alias inst='sudo pacman -S'
-alias rem='sudo pacman -R'
-alias frem='sudo pacman -Rcns'
-alias up='sudo pacman -Syy'
-alias upg='sudo pacman -Syu'
+alias install='sudo pacman -S'
+alias remove='sudo pacman -R'
+alias full-remove='sudo pacman -Rcns'
+alias update='sudo pacman -Syy'
+alias upgrade='sudo pacman -Syu'
 alias unlock='sudo rm /var/lib/pacman/db.lck'
 alias cleanup='sudo pacman -Rns (pacman -Qtdq)'
 
 # git
-
 alias gs='git status'
 alias ga='git add'
 alias gc='git commit -m'
