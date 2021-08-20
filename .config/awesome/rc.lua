@@ -173,7 +173,7 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "DEV", "WWW", "SYS", "DOC", "VBOX", "CHAT", "MUS", "VID", "GFX" }, s, awful.layout.layouts[1])
+    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -200,21 +200,21 @@ awful.screen.connect_for_each_screen(function(s)
     }
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "bottom", screen = s })
+    s.mywibox = awful.wibar({ position = "top", screen = s })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
-            --mylauncher,
+            mylauncher,
             s.mytaglist,
             s.mypromptbox,
         },
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-           -- mykeyboardlayout,
+            mykeyboardlayout,
             wibox.widget.systray(),
             mytextclock,
             s.mylayoutbox,
@@ -315,37 +315,8 @@ globalkeys = gears.table.join(
               {description = "restore minimized", group = "client"}),
 
     -- Prompt
-    awful.key({ modkey },            "r",     function ()
-    awful.util.spawn("rofi -show drun") end,
-              {description = "run rofi", group = "launcher"}),
-
-
-    -- Firefox
-    awful.key({ modkey },            "b",     function ()
-    awful.util.spawn("google-chrome-stable") end,
-              {description = "run google chrome", group = "applications"}),
-
-
-    -- PcManFM
-    awful.key({ modkey },            "e",     function ()
-    awful.util.spawn("pcmanfm") end,
-              {description = "run pcmanfm", group = "applications"}),
-
-    -- Volume Keys
-    awful.key({}, "XF86AudioLowerVolume", function ()
-      awful.util.spawn("amixer -q -D pulse sset Master 5%-", false) end),
-    awful.key({}, "XF86AudioRaiseVolume", function ()
-      awful.util.spawn("amixer -q -D pulse sset Master 5%+", false) end),
-    awful.key({}, "XF86AudioMute", function ()
-      awful.util.spawn("amixer -D pulse set Master 1+ toggle", false) end),
-   
-      -- Media Keys
-    awful.key({}, "XF86AudioPlay", function()
-      awful.util.spawn("playerctl play-pause", false) end),
-    awful.key({}, "XF86AudioNext", function()
-      awful.util.spawn("playerctl next", false) end),
-    awful.key({}, "XF86AudioPrev", function()
-      awful.util.spawn("playerctl previous", false) end),
+    awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
+              {description = "run prompt", group = "launcher"}),
 
     awful.key({ modkey }, "x",
               function ()
@@ -523,12 +494,12 @@ awful.rules.rules = {
 
     -- Add titlebars to normal clients and dialogs
     { rule_any = {type = { "normal", "dialog" }
-     }, properties = { titlebars_enabled = false }
+      }, properties = { titlebars_enabled = true }
     },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
-     --{ rule = { class = "Firefox" },
-       --properties = { screen = 1, tag = "2" } },
+    -- { rule = { class = "Firefox" },
+    --   properties = { screen = 1, tag = "2" } },
 }
 -- }}}
 
@@ -563,7 +534,7 @@ client.connect_signal("request::titlebars", function(c)
 
     awful.titlebar(c) : setup {
         { -- Left
-            --awful.titlebar.widget.iconwidget(c),
+            awful.titlebar.widget.iconwidget(c),
             buttons = buttons,
             layout  = wibox.layout.fixed.horizontal
         },
@@ -578,8 +549,8 @@ client.connect_signal("request::titlebars", function(c)
         { -- Right
             awful.titlebar.widget.floatingbutton (c),
             awful.titlebar.widget.maximizedbutton(c),
-            --awful.titlebar.widget.stickybutton   (c),
-            --awful.titlebar.widget.ontopbutton    (c),
+            awful.titlebar.widget.stickybutton   (c),
+            awful.titlebar.widget.ontopbutton    (c),
             awful.titlebar.widget.closebutton    (c),
             layout = wibox.layout.fixed.horizontal()
         },
@@ -595,12 +566,3 @@ end)
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
-
--- Autostart Applications
-awful.spawn.with_shell("lxsession")
-awful.spawn.with_shell("picom")
-awful.spawn.with_shell("nitrogen --restore ")
-awful.spawn.with_shell("setxkbmap us -variant altgr-intl")
-awful.spawn.with_shell("numlockx")
-awful.spawn.with_shell("nm-applet")
---awful.spawn.with_shell("/usr/bin/dunst")
