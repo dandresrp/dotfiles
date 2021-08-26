@@ -1,3 +1,4 @@
+-----------------------------------------------------------------------
 -- IMPORTS
 
 import XMonad
@@ -8,6 +9,7 @@ import XMonad.Layout.NoBorders
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.SetWMName
 import Graphics.X11.ExtraTypes.XF86
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
@@ -15,7 +17,9 @@ import qualified Data.Map        as M
 -- Preferred applications
 myTerminal      = "alacritty"
 myBrowser	= "google-chrome-stable"
-myLauncher   = "rofi -show drun"
+--myBrowser	= "firefox"
+--myBrowser	= "firefox-developer-edition"
+myLauncher      = "rofi -show drun"
 myFileManager	= "Thunar"
 
 -- Whether focus follows the mouse pointer.
@@ -54,6 +58,19 @@ myNormalBorderColor  = "#333"
 myFocusedBorderColor = "#999"
 
 ------------------------------------------------------------------------
+-- Startup hook
+
+-- Perform an arbitrary action each time xmonad starts or is restarted
+-- with mod-q.  Used by, e.g., XMonad.Layout.PerWorkspace to initialize
+-- per-workspace layout choices.
+--
+-- By default, do nothing.
+myStartupHook :: X ()
+myStartupHook = do
+    spawn "$HOME/.xmonad/autostart.sh"
+    setWMName "LG3D"
+
+------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
 --
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
@@ -75,6 +92,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- launch screenshot tool
     , ((modm .|. shiftMask, xK_s     ), spawn "flameshot gui")
+
+    -- launch betterlockscreen
+    , ((modm .|. shiftMask, xK_x     ), spawn "arcolinux-logout")
 
     -- Volume Keys
     , ((0, xF86XK_AudioRaiseVolume),  spawn "amixer -D pulse sset Master 10%+")
@@ -247,22 +267,6 @@ myEventHook = mempty
 -- See the 'XMonad.Hooks.DynamicLog' extension for examples.
 --
 myLogHook = return ()
-
-------------------------------------------------------------------------
--- Startup hook
-
--- Perform an arbitrary action each time xmonad starts or is restarted
--- with mod-q.  Used by, e.g., XMonad.Layout.PerWorkspace to initialize
--- per-workspace layout choices.
---
--- By default, do nothing.
-myStartupHook = do
-	spawnOnce "xfsettingsd &"
-	spawnOnce "nitrogen --restore &"
-	spawnOnce "picom --config ~/.config/picom.conf &"
-	spawnOnce "numlockx &"
-	spawnOnce "setxkbmap us -variant altgr-intl"
-	spawnOnce "thunar --daemon &"
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.

@@ -3,7 +3,7 @@ set -e fish_user_paths
 set -U fish_user_paths $HOME/.local/bin $HOME/Applications $fish_user_paths
 
 ### EXPORT ###
-set fish_greeting
+set fish_greeting 
 set TERM "xterm-256color"
 export EDITOR='vim'
 export EDITOR2='subl'
@@ -80,6 +80,7 @@ alias vrofi="sudo $EDITOR ~/.config/rofi/config.rasi"
 alias vxmonad="sudo $EDITOR ~/.xmonad/xmonad.hs"
 alias vxmobar="sudo $EDITOR ~/.config/xmobar/xmobarrc"
 alias vawesome="sudo $EDITOR ~/.config/awesome/rc.lua"
+alias sqtile="sudo $EDITOR ~/.config/qtile/config.py"
 alias valacritty="sudo $EDITOR ~/.config/alacritty/alacritty.yml"
 alias vb="$EDITOR ~/.bashrc"
 alias vf="$EDITOR ~/.config/fish/config.fish"
@@ -96,6 +97,7 @@ alias srofi="$EDITOR2 ~/.config/rofi/config.rasi && exit"
 alias sxmonad="$EDITOR2 ~/.xmonad/xmonad.hs && exit"
 alias sxmobar="$EDITOR2 ~/.config/xmobar/xmobarrc && exit"
 alias sawesome="$EDITOR2 ~/.config/awesome/rc.lua && exit"
+alias sqtile="$EDITOR2 ~/.config/qtile/config.py && exit"
 alias salacritty="$EDITOR2 ~/.config/alacritty/alacritty.yml && exit"
 alias sb="$EDITOR2 ~/.bashrc && exit"
 alias sf="$EDITOR2 ~/.config/fish/config.fish && exit"
@@ -103,6 +105,33 @@ alias sf="$EDITOR2 ~/.config/fish/config.fish && exit"
 # shutdown or reboot
 alias ssn="sudo shutdown now"
 alias sr="sudo reboot"
+
+#arcolinux logout unlock
+alias rmlogoutlock="sudo rm /tmp/arcologout.lock"
+
+#arcolinux applications
+alias att="arcolinux-tweak-tool"
+alias adt="arcolinux-desktop-trasher"
+alias abl="arcolinux-betterlockscreen"
+alias agm="arcolinux-get-mirrors"
+alias amr="arcolinux-mirrorlist-rank-info"
+alias aom="arcolinux-osbeck-as-mirror"
+alias ars="arcolinux-reflector-simple"
+alias atm="arcolinux-tellme"
+alias avs="arcolinux-vbox-share"
+alias awa="arcolinux-welcome-app"
+
+#continue download
+alias wget="wget -c"
+
+#grub update
+alias grub-update="sudo grub-mkconfig -o /boot/grub/grub.cfg"
+
+#check vulnerabilities microcode
+alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
+
+# updatedb for mlocate
+alias udb='sudo updatedb'
 
 ### SETTING THE STARSHIP PROMPT ###
 starship init fish | source

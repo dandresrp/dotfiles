@@ -1,4 +1,4 @@
-Config { font = "xft:Terminus:pixelsize=14:antialias=true:hinting=true"
+Config { font = "xft:Mononoki Nerd Font:pixelsize=12:antialias=true:hinting=true"
        , additionalFonts = []
        , borderColor = "#f4f4f4"
        , border = NoBorder

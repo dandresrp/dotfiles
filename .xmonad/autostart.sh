@@ -21,7 +21,7 @@ run dex $HOME/.config/autostart/arcolinux-welcome-app.desktop
 #starting utility applications at boot time
 #run variety &
 #run nm-applet &
-#run pamac-tray &
+run pamac-tray &
 #run xfce4-power-manager &
 #run volumeicon &
 numlockx on &
