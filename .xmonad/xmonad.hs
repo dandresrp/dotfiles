@@ -4,12 +4,23 @@
 import XMonad
 import Data.Monoid
 import System.Exit
+
+-- LAYOUT
 import XMonad.Layout.Spacing
 import XMonad.Layout.NoBorders
+
+-- UTILS
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
+import XMonad.Util.WindowProperties
+import XMonad.Util.EZConfig
+
+-- HOOKS
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.SetWMName
+import XMonad.Hooks.ManageHelpers
+
+-- EXTRAS
 import Graphics.X11.ExtraTypes.XF86
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
@@ -17,8 +28,6 @@ import qualified Data.Map        as M
 -- Preferred applications
 myTerminal      = "alacritty"
 myBrowser	= "google-chrome-stable"
---myBrowser	= "firefox"
---myBrowser	= "firefox-developer-edition"
 myLauncher      = "rofi -show drun"
 myFileManager	= "Thunar"
 
@@ -80,9 +89,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- launch launcher
     , ((modm,               xK_p     ), spawn myLauncher)
-
-    -- launch powermenu
-    --, ((modm .|. shiftMask, xK_q     ), spawn myPowerMenu)
 
     -- launch file manager
     , ((modm,               xK_f     ), spawn myFileManager)
@@ -206,14 +212,6 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 ------------------------------------------------------------------------
 -- Layouts:
 
--- You can specify and transform your layouts by modifying these values.
--- If you change layout bindings be sure to use 'mod-shift-space' after
--- restarting (with 'mod-q') to reset your layout state to the new
--- defaults, as xmonad preserves your old layout settings by default.
---
--- The available layouts.  Note that each layout is separated by |||,
--- which denotes layout choice.
---
 myLayout =  (tiled ||| smartBorders Full)
   where
      -- default tiling algorithm partitions the screen into two panes
@@ -231,23 +229,12 @@ myLayout =  (tiled ||| smartBorders Full)
 ------------------------------------------------------------------------
 -- Window rules:
 
--- Execute arbitrary actions and WindowSet manipulations when managing
--- a new window. You can use this to, for example, always float a
--- particular program, or have a client always appear on a particular
--- workspace.
---
--- To find the property name associated with a program, use
--- > xprop | grep WM_CLASS
--- and click on the client you're interested in.
---
--- To match on the WM_NAME, you can use 'title' in the same way that
--- 'className' and 'resource' are used below.
---
 myManageHook = composeAll
     [ className =? "MPlayer"        --> doFloat
-    , className =? "Gimp"           --> doFloat
     , resource  =? "desktop_window" --> doIgnore
-    , resource  =? "kdesktop"       --> doIgnore ]
+    , resource  =? "kdesktop"       --> doIgnore
+    , isDialog --> doCenterFloat
+    ]
 
 ------------------------------------------------------------------------
 -- Event handling
