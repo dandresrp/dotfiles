@@ -9,6 +9,8 @@ import System.Exit
 import XMonad.Layout.WindowArranger
 import XMonad.Layout.Spacing
 import XMonad.Layout.NoBorders
+import XMonad.Layout.ShowWName
+import XMonad.Layout.Fullscreen
 
 -- UTILS
 import XMonad.Util.Run
@@ -19,6 +21,7 @@ import XMonad.Util.EZConfig (additionalKeysP)
 -- ACTIONS
 import XMonad.Actions.MouseResize
 import XMonad.Actions.WithAll
+import XMonad.Actions.CycleWS
 
 -- HOOKS
 import XMonad.Hooks.ManageDocks
@@ -148,6 +151,18 @@ myKeys = [
     -- Deincrement the number of windows in the master area
     , ("M-period", sendMessage (IncMasterN (-1)))
 
+    -- Send focused client to next workspace
+    , ("M-S-<Up>", shiftToNext >> nextWS)
+
+    -- Send focused client to previous workspace
+    , ("M-S-<Down>", shiftToPrev >> prevWS)
+
+    -- Go to next workspace
+    , ("M-<Up>", nextWS)
+
+    -- Go to previous workspace
+    , ("M-<Down>", prevWS)
+
     -- Quit xmonad
     , ("M-S-q", io (exitWith ExitSuccess))
 
@@ -155,23 +170,6 @@ myKeys = [
     , ("M-q", spawn "xmonad --recompile; killall xmobar; xmonad --restart")
 
     ]
-    --
-    -- mod-[1..9], Switch to workspace N
-    -- mod-shift-[1..9], Move client to workspace N
-    --
-    -- [((m .|. modm, k), windows $ f i)
-    --     | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
-    --     , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
-    -- ++
-
-    -- --
-    -- -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
-    -- -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
-    -- --
-    -- [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-    --     | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
-    --     , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
-
 ------------------------------------------------------------------------
 -- Layouts:
 
@@ -189,6 +187,13 @@ myLayout =  mouseResize $ windowArrange (tiled ||| smartBorders Full)
      -- Percent of screen to increment by when resizing panes
      delta   = 3/100
 
+myShowWNameTheme :: SWNConfig
+myShowWNameTheme = def
+    { swn_font              = "xft:Ubuntu:bold:size=60"
+    , swn_fade              = 1.0
+    , swn_bgcolor           = "#1c1f24"
+    , swn_color             = "#ffffff"
+    }
 ------------------------------------------------------------------------
 -- Window rules:
 
@@ -196,6 +201,7 @@ myManageHook = composeAll
     [ className =? "MPlayer"        --> doFloat
     , resource  =? "desktop_window" --> doIgnore
     , resource  =? "kdesktop"       --> doIgnore
+    , className =? "Alacritty" --> doCenterFloat
     , isDialog --> doCenterFloat
     ]
 
@@ -225,7 +231,7 @@ myLogHook = return ()
 --
 main = do
     xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"
-    xmonad $ docks defaults
+    xmonad $ fullscreenSupport $ docks defaults
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
@@ -242,7 +248,7 @@ defaults = def {
         workspaces         = myWorkspaces,
         normalBorderColor  = myNormalBorderColor,
         focusedBorderColor = myFocusedBorderColor,
-        layoutHook         = myLayout,
+        layoutHook         = showWName' myShowWNameTheme $ myLayout,
         manageHook         = myManageHook,
         handleEventHook    = myEventHook,
         logHook            = myLogHook,
