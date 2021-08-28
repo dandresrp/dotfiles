@@ -27,30 +27,29 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.FadeInactive
 
 -- EXTRAS
 import Graphics.X11.ExtraTypes.XF86
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
--- Preferred applications
+-- My Applications
 myTerminal = "alacritty"
 myBrowser = "google-chrome-stable"
 myLauncher = "rofi -show drun"
 myFileManager = "Thunar"
 myTextEditor = "code"
 
--- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
 
--- Whether clicking on a window to focus also passes the click to the window
 myClickJustFocuses :: Bool
 myClickJustFocuses = False
 
-myBorderWidth   = 1
+myBorderWidth = 1
 
-myModMask       = mod4Mask
+myModMask = mod4Mask
 
 myNormalBorderColor  = "#333"
 myFocusedBorderColor = "#999"
@@ -65,7 +64,7 @@ myStartupHook = do
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
---
+
 myKeys = [
 
     -- Run Applications
@@ -76,6 +75,7 @@ myKeys = [
     , ("M-c", spawn (myTextEditor))
     , ("M-S-s", spawn "flameshot gui") -- Screenshot Tool
     , ("M-S-x", spawn "arcolinux-logout") -- Arcolinux Betterlockscreen
+    , ("M-<F2>", spawn "feh --bg-scale --randomize ~/Pictures/Wallpapers/*") -- Set Random Wallpaper with Feh
 
     -- Volume Keys
     , ("<XF86AudioRaiseVolume>", spawn "amixer -D pulse sset Master 10%+")
@@ -85,68 +85,40 @@ myKeys = [
     -- Windows Actions
     , ("M-S-c", kill) -- Close focused window
     , ("M-S-a", killAll) -- Close all windows in current workspace
+    , ("M-S-t", sinkAll) -- Unfloat all floating windows 
 
-    -- Rotate through the available layout algorithms
-    , ("M-<Space>", sendMessage NextLayout)
+    , ("M-n", refresh) -- Resize viewed windows to the correct size
+    , ("M-<Tab>", windows W.focusDown) -- Move focus to the next window
+    , ("M-j", windows W.focusDown) -- Move focus to the next window
+    , ("M-k", windows W.focusUp) -- Move focus to the previous window
+    , ("M-m", windows W.focusMaster) -- Move focus to the master window
+    , ("M-<Return>", windows W.swapMaster) -- Swap the focused window and the master window
+    , ("M-S-j", windows W.swapDown) -- Swap the focused window with the next window
+    , ("M-S-k", windows W.swapUp) -- Swap the focused window with the previous window
+    , ("M-t", withFocused $ windows . W.sink) -- Push window back into tiling
 
-    -- Resize viewed windows to the correct size
-    , ("M-n", refresh)
+    -- Master Area
 
-    -- Move focus to the next window
-    , ("M-<Tab>", windows W.focusDown)
+    , ("M-h", sendMessage Shrink) -- Shrink the master area    
+    , ("M-l", sendMessage Expand) -- Expand the master area    
+    , ("M-comma", sendMessage (IncMasterN 1)) -- Increment the number of windows in the master area    
+    , ("M-period", sendMessage (IncMasterN (-1))) -- Deincrement the number of windows in the master area
 
-    -- Move focus to the next window
-    , ("M-j", windows W.focusDown)
+    -- Workspaces
+ 
+    , ("M-S-<Up>", shiftToNext >> nextWS) -- Send focused client to next workspace
+    , ("M-S-<Down>", shiftToPrev >> prevWS) -- Send focused client to previous workspace
+    , ("M-<Up>", nextWS) -- Go to next workspace
+    , ("M-<Down>", prevWS) -- Go to previous workspace
 
-    -- Move focus to the previous window
-    , ("M-k", windows W.focusUp  )
+    -- Layouts
+    , ("M-<Space>", sendMessage NextLayout) -- Switch layouts
 
-    -- Move focus to the master window
-    , ("M-m", windows W.focusMaster  )
-
-    -- Swap the focused window and the master window
-    , ("M-<Return>", windows W.swapMaster)
-
-    -- Swap the focused window with the next window
-    , ("M-S-j", windows W.swapDown)
-
-    -- Swap the focused window with the previous window
-    , ("M-S-k", windows W.swapUp)
-
-    -- Shrink the master area
-    , ("M-h", sendMessage Shrink)
-
-    -- Expand the master area
-    , ("M-l", sendMessage Expand)
-
-    -- Push window back into tiling
-    , ("M-t", withFocused $ windows . W.sink)
-
-    -- Increment the number of windows in the master area
-    , ("M-comma", sendMessage (IncMasterN 1))
-
-    -- Deincrement the number of windows in the master area
-    , ("M-period", sendMessage (IncMasterN (-1)))
-
-    -- Send focused client to next workspace
-    , ("M-S-<Up>", shiftToNext >> nextWS)
-
-    -- Send focused client to previous workspace
-    , ("M-S-<Down>", shiftToPrev >> prevWS)
-
-    -- Go to next workspace
-    , ("M-<Up>", nextWS)
-
-    -- Go to previous workspace
-    , ("M-<Down>", prevWS)
-
-    -- Quit xmonad
-    , ("M-S-q", io (exitWith ExitSuccess))
-
-    -- Restart xmonad
-    , ("M-q", spawn "xmonad --recompile; killall xmobar; xmonad --restart")
-
+    -- XMonad
+    , ("M-S-q", io (exitWith ExitSuccess)) -- Quit XMonad
+    , ("M-q", spawn "xmonad --recompile; killall xmobar; xmonad --restart") -- Restart XMonad
     ]
+
 ------------------------------------------------------------------------
 -- Layouts:
 
@@ -163,6 +135,10 @@ myLayout =  mouseResize $ windowArrange (tiled ||| smartBorders Full)
 
      -- Percent of screen to increment by when resizing panes
      delta   = 3/100
+------------------------------------------------------------------------
+-- Workspaces
+
+myWorkspaces = ["sys","web","code","chat","doc","virt","mus","vid","gfx"]
 
 myShowWNameTheme :: SWNConfig
 myShowWNameTheme = def
@@ -171,18 +147,14 @@ myShowWNameTheme = def
     , swn_bgcolor           = "#1c1f24"
     , swn_color             = "#ffffff"
     }
-------------------------------------------------------------------------
--- Workspaces
-
-myWorkspaces = ["sys","web","code","chat","doc","virt","mus","vid","gfx"]
 
 ------------------------------------------------------------------------
 -- Window rules:
 
 myManageHook = composeAll
-    [ className =? "MPlayer"        --> doFloat
-    , resource  =? "desktop_window" --> doIgnore
+    [ resource  =? "desktop_window" --> doIgnore
     , resource  =? "kdesktop"       --> doIgnore
+    , className =? "Arcologout.py" --> doFullFloat
     , isDialog --> doCenterFloat
     ]
 ------------------------------------------------------------------------
@@ -191,7 +163,8 @@ myManageHook = composeAll
 -- Perform an arbitrary action on each internal state change or X event.
 -- See the 'XMonad.Hooks.DynamicLog' extension for examples.
 --
-myLogHook = return ()
+myLogHook = fadeInactiveLogHook fadeAmount
+    where fadeAmount = 0.90
 
 ------------------------------------------------------------------------
 main = do
