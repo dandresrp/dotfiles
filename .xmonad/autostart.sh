@@ -21,8 +21,8 @@ run dex $HOME/.config/autostart/arcolinux-welcome-app.desktop
 #starting utility applications at boot time
 #run variety &
 #run nm-applet &
-run pamac-tray &
-#run xfce4-power-manager &
+#run pamac-tray &
+run xfce4-power-manager &
 #run volumeicon &
 numlockx on &
 picom --config $HOME/.xmonad/picom.conf &
@@ -42,6 +42,6 @@ run thunar --daemon &
 
 #run telegram-desktop &
 #run discord &
-#run dropbox &
+run dropbox &
 #run insync start &
 #run ckb-next -b &

@@ -1,4 +1,4 @@
-Config { font = "xft:Mononoki Nerd Font:pixelsize=12:antialias=true:hinting=true"
+Config { font = "xft:Bitstream Vera Sans Mono:pixelsize=11:antialias=true:hinting=true"
        , additionalFonts = []
        , borderColor = "#f4f4f4"
        , border = NoBorder
@@ -15,14 +15,16 @@ Config { font = "xft:Mononoki Nerd Font:pixelsize=12:antialias=true:hinting=true
        , iconRoot = "."
        , allDesktops = True
        , overrideRedirect = True
-       , commands = [ Run Cpu ["-L","3","-H","50",
-                               "--normal","green","--high","red"] 10
-                    , Run Memory ["-t","Mem: <usedratio>%"] 10
-                    , Run Swap [] 10
-                    , Run Com "uname" ["-s","-r"] "" 36000
-                    , Run Date "%a, %b %d %Y %I:%M %p" "date" 10
+       , commands = [
+                    -- Time and date 
+                     Run Date "%a, %b %d %Y %I:%M %p" "date" 10
+                    -- Volume
+                    ,Run Volume "default" "Master" ["-t", "VOL: <volume>% <status>"] 1
+		    -- CPU usage
+                    ,Run Cpu ["-t", "CPU: <total>%","-H","50","--high","red"] 10
+		    -- Memory Usage
+                    ,Run Memory ["-t", "MEM: <usedratio>%"] 10  
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "}\
-                    \{<fc=#f1fa8c>%date%</fc> | XMonad "}
+       , template = " }{ %memory% | %cpu% | %default:Master%| <fc=#f1fa8c>%date%</fc> | XMonad "}

@@ -10,7 +10,6 @@ import XMonad.Layout.WindowArranger
 import XMonad.Layout.Spacing
 import XMonad.Layout.NoBorders
 import XMonad.Layout.ShowWName
-import XMonad.Layout.Fullscreen
 
 -- UTILS
 import XMonad.Util.Run
@@ -27,6 +26,7 @@ import XMonad.Actions.CycleWS
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.EwmhDesktops
 
 -- EXTRAS
 import Graphics.X11.ExtraTypes.XF86
@@ -38,6 +38,7 @@ myTerminal = "alacritty"
 myBrowser = "google-chrome-stable"
 myLauncher = "rofi -show drun"
 myFileManager = "Thunar"
+myTextEditor = "code"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
@@ -50,8 +51,6 @@ myClickJustFocuses = False
 myBorderWidth   = 1
 
 myModMask       = mod4Mask
-
-myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
 
 myNormalBorderColor  = "#333"
 myFocusedBorderColor = "#999"
@@ -74,6 +73,7 @@ myKeys = [
     , ("M-p", spawn (myLauncher))           
     , ("M-f", spawn (myFileManager))       
     , ("M-b", spawn (myBrowser))
+    , ("M-c", spawn (myTextEditor))
     , ("M-S-s", spawn "flameshot gui") -- Screenshot Tool
     , ("M-S-x", spawn "arcolinux-logout") -- Arcolinux Betterlockscreen
 
@@ -172,27 +172,19 @@ myShowWNameTheme = def
     , swn_color             = "#ffffff"
     }
 ------------------------------------------------------------------------
+-- Workspaces
+
+myWorkspaces = ["sys","web","code","chat","doc","virt","mus","vid","gfx"]
+
+------------------------------------------------------------------------
 -- Window rules:
 
 myManageHook = composeAll
     [ className =? "MPlayer"        --> doFloat
     , resource  =? "desktop_window" --> doIgnore
     , resource  =? "kdesktop"       --> doIgnore
-    , className =? "Alacritty" --> doCenterFloat
     , isDialog --> doCenterFloat
     ]
-
-------------------------------------------------------------------------
--- Event handling
-
--- * EwmhDesktops users should change this to ewmhDesktopsEventHook
---
--- Defines a custom handler function for X Events. The function should
--- return (All True) if the default handler is to be run afterwards. To
--- combine event hooks use mappend or mconcat from Data.Monoid.
---
-myEventHook = mempty
-
 ------------------------------------------------------------------------
 -- Status bars and logging
 
@@ -204,7 +196,7 @@ myLogHook = return ()
 ------------------------------------------------------------------------
 main = do
     xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"
-    xmonad $ fullscreenSupport $ docks defaults
+    xmonad $ ewmh defaults
 
 defaults = def {
         terminal           = myTerminal,
@@ -216,8 +208,8 @@ defaults = def {
         normalBorderColor  = myNormalBorderColor,
         focusedBorderColor = myFocusedBorderColor,
         layoutHook         = showWName' myShowWNameTheme $ myLayout,
-        manageHook         = myManageHook,
-        handleEventHook    = myEventHook,
+        manageHook         = myManageHook <+> manageDocks,
+        handleEventHook    = handleEventHook def <+> fullscreenEventHook <+> docksEventHook,
         logHook            = myLogHook,
         startupHook        = myStartupHook
     } `additionalKeysP` myKeys
