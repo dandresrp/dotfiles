@@ -1,4 +1,4 @@
-Config { font = "xft:Bitstream Vera Sans Mono:pixelsize=11:antialias=true:hinting=true"
+Config { font = "xft:Bitstream Vera Sans Mono:pixelsize=12:antialias=true:hinting=true:bold"
        , additionalFonts = []
        , borderColor = "#f4f4f4"
        , border = NoBorder
@@ -17,7 +17,7 @@ Config { font = "xft:Bitstream Vera Sans Mono:pixelsize=11:antialias=true:hintin
        , overrideRedirect = True
        , commands = [
                     -- Time and date 
-                     Run Date "%a, %b %d %Y %I:%M %p" "date" 10
+                     Run Date "%I:%M %p - %d/%m/%y" "date" 10
                     -- Volume
                     ,Run Volume "default" "Master" ["-t", "VOL: <volume>% <status>"] 1
 		    -- CPU usage
@@ -27,4 +27,4 @@ Config { font = "xft:Bitstream Vera Sans Mono:pixelsize=11:antialias=true:hintin
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = " }{ %memory% | %cpu% | %default:Master%| <fc=#f1fa8c>%date%</fc> | XMonad "}
+       , template = " }{ %memory% | %cpu% | %default:Master%| %date% "}
