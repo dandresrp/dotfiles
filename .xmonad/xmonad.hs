@@ -27,7 +27,6 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.EwmhDesktops
-import XMonad.Hooks.FadeInactive
 
 -- EXTRAS
 import Graphics.X11.ExtraTypes.XF86
@@ -38,8 +37,7 @@ import qualified Data.Map        as M
 myTerminal = "alacritty"
 myBrowser = "google-chrome-stable"
 myLauncher = "rofi -show drun"
-myFileManager = "Thunar"
-myTextEditor = "code"
+myFileManager = "pcmanfm"
 
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
@@ -72,10 +70,10 @@ myKeys = [
     , ("M-p", spawn (myLauncher))           
     , ("M-f", spawn (myFileManager))       
     , ("M-b", spawn (myBrowser))
-    , ("M-c", spawn (myTextEditor))
+    , ("M-c", spawn "code")
     , ("M-S-s", spawn "flameshot gui") -- Screenshot Tool
-    , ("M-S-x", spawn "arcolinux-logout") -- Arcolinux Betterlockscreen
-    , ("M-<F2>", spawn "feh --bg-scale --randomize ~/Pictures/Wallpapers/*") -- Set Random Wallpaper with Feh
+    , ("M-S-x", spawn "clearine") -- Arcolinux Betterlockscreen
+    , ("M-<F1>", spawn "feh --bg-scale --randomize ~/Pictures/Wallpapers/*") -- Set Random Wallpaper with Feh
 
     -- Volume Keys
     , ("<XF86AudioRaiseVolume>", spawn "amixer -D pulse sset Master 10%+")
@@ -140,13 +138,13 @@ myLayout =  mouseResize $ windowArrange (tiled ||| smartBorders Full)
 
 myWorkspaces = ["sys","web","code","chat","doc","virt","mus","vid","gfx"]
 
-myShowWNameTheme :: SWNConfig
-myShowWNameTheme = def
-    { swn_font              = "xft:Ubuntu:bold:size=60"
-    , swn_fade              = 1.0
-    , swn_bgcolor           = "#1c1f24"
-    , swn_color             = "#ffffff"
-    }
+--myShowWNameTheme :: SWNConfig
+--myShowWNameTheme = def
+  --  { swn_font              = "xft:Ubuntu:bold:size=60"
+  --  , swn_fade              = 1.0
+  --  , swn_bgcolor           = "#1c1f24"
+  --  , swn_color             = "#ffffff"
+  --  }
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -154,7 +152,8 @@ myShowWNameTheme = def
 myManageHook = composeAll
     [ resource  =? "desktop_window" --> doIgnore
     , resource  =? "kdesktop"       --> doIgnore
-    , className =? "Arcologout.py" --> doFullFloat
+    , className =? "Clearine" --> doFullFloat
+    , className =? "Evince" --> doFullFloat
     , isDialog --> doCenterFloat
     ]
 ------------------------------------------------------------------------
@@ -163,8 +162,7 @@ myManageHook = composeAll
 -- Perform an arbitrary action on each internal state change or X event.
 -- See the 'XMonad.Hooks.DynamicLog' extension for examples.
 --
-myLogHook = fadeInactiveLogHook fadeAmount
-    where fadeAmount = 0.90
+myLogHook = return()
 
 ------------------------------------------------------------------------
 main = do
@@ -180,7 +178,8 @@ defaults = def {
         workspaces         = myWorkspaces,
         normalBorderColor  = myNormalBorderColor,
         focusedBorderColor = myFocusedBorderColor,
-        layoutHook         = showWName' myShowWNameTheme $ myLayout,
+        --layoutHook         = showWName' myShowWNameTheme $ myLayout,
+        layoutHook         = myLayout,
         manageHook         = myManageHook <+> manageDocks,
         handleEventHook    = handleEventHook def <+> fullscreenEventHook <+> docksEventHook,
         logHook            = myLogHook,
