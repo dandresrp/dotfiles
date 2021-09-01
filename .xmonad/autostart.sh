@@ -25,4 +25,7 @@ udiskie &
 setxkbmap us -variant altgr-intl &
 #run thunar --daemon &
 run pcmanfm -d &
-run dropbox &
+
+Launch XMobar
+xmobar ~/.config/xmobar/xmobarrc &
+

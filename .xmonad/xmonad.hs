@@ -74,6 +74,7 @@ myKeys = [
     , ("M-S-s", spawn "flameshot gui") -- Screenshot Tool
     , ("M-S-x", spawn "clearine") -- Arcolinux Betterlockscreen
     , ("M-<F1>", spawn "feh --bg-scale --randomize ~/Pictures/Wallpapers/*") -- Set Random Wallpaper with Feh
+    , ("M-<F2>", spawn "feh --bg-scale --randomize /usr/share/backgrounds/archlinux/*") -- Set Random Wallpaper with Feh
 
     -- Volume Keys
     , ("<XF86AudioRaiseVolume>", spawn "amixer -D pulse sset Master 10%+")
@@ -166,7 +167,7 @@ myLogHook = return()
 
 ------------------------------------------------------------------------
 main = do
-    xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"
+    --xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"
     xmonad $ ewmh defaults
 
 defaults = def {
