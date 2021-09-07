@@ -32,13 +32,13 @@ alias clt='clear && lt'
 alias cl.='clear && l.'
 
 # pacman
-alias install='sudo pacman -S'
-alias remove='sudo pacman -R'
-alias full-remove='sudo pacman -Rcns'
-alias update='sudo pacman -Syy'
-alias upgrade='sudo pacman -Syu'
+#alias install='sudo pacman -S'
+#alias remove='sudo pacman -R'
+#alias full-remove='sudo pacman -Rcns'
+#alias update='sudo pacman -Syy'
+#alias upgrade='sudo pacman -Syu'
 alias unlock='sudo rm /var/lib/pacman/db.lck'
-alias cleanup='sudo pacman -Rns (pacman -Qtdq)'
+alias cleanup='sudo aura -Oj'
 
 # git
 alias gs='git status'
@@ -122,7 +122,7 @@ alias avs="arcolinux-vbox-share"
 alias awa="arcolinux-welcome-app"
 
 #continue download
-alias wget="wget -c"
+alias wget="wget -c -P ~/Downloads/"
 
 #grub update
 alias grub-update="sudo grub-mkconfig -o /boot/grub/grub.cfg"

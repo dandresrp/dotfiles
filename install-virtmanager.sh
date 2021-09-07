@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### Install these packages
-sudo pacman -S virt-manager qemu qemu-arch-extra ovmf vde2 ebtables dnsmasq bridge-utils openbsd-netcat
+sudo aura -S virt-manager qemu qemu-arch-extra ovmf vde2 ebtables dnsmasq bridge-utils openbsd-netcat
 
 ### Enable services
 sudo systemctl enable libvirtd.service

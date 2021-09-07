@@ -17,7 +17,7 @@ Config { font = "xft:Bitstream Vera Sans Mono:pixelsize=12:antialias=true:hintin
        , overrideRedirect = True
        , commands = [
                     -- Time and date 
-                     Run Date "%I:%M %p - %d/%m/%y" "date" 10
+                     Run Date "%I:%M %p | %d/%m/%y" "date" 10
                     -- Volume
                     ,Run Volume "default" "Master" ["-t", "VOL: <volume>% <status>"] 1
 		    -- CPU usage
@@ -27,4 +27,4 @@ Config { font = "xft:Bitstream Vera Sans Mono:pixelsize=12:antialias=true:hintin
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = " }{ %memory% | %cpu% | %default:Master%| %date% "}
+       , template = " }{ %date% "}
