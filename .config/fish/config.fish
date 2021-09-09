@@ -36,7 +36,7 @@ alias cl.='clear && l.'
 #alias remove='sudo pacman -R'
 #alias full-remove='sudo pacman -Rcns'
 #alias update='sudo pacman -Syy'
-#alias upgrade='sudo pacman -Syu'
+alias upgrade='sudo aura -Syu && sudo aura -Au'
 alias unlock='sudo rm /var/lib/pacman/db.lck'
 alias cleanup='sudo aura -Oj'
 

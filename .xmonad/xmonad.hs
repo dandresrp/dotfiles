@@ -36,8 +36,10 @@ import qualified Data.Map        as M
 -- My Applications
 myTerminal = "alacritty"
 myBrowser = "google-chrome-stable"
-myLauncher = "rofi -show drun"
+myLauncher = "dmenu_run -l 20 -bw 2 -g 3"
+my2ndLauncher = "rofi -show drun"
 myFileManager = "pcmanfm"
+myOfficeSuite = "~/Downloads/DesktopEditors-x86_64.AppImage"
 
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
@@ -68,6 +70,8 @@ myKeys = [
     -- Run Applications
       ("M-S-<Return>", spawn (myTerminal)) 
     , ("M-p", spawn (myLauncher))           
+    , ("M-S-p", spawn (my2ndLauncher))           
+    , ("M-o", spawn (myOfficeSuite))           
     , ("M-f", spawn (myFileManager))       
     , ("M-b", spawn (myBrowser))
     , ("M-c", spawn "code")
