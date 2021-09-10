@@ -36,10 +36,8 @@ import qualified Data.Map        as M
 -- My Applications
 myTerminal = "alacritty"
 myBrowser = "google-chrome-stable"
-myLauncher = "dmenu_run -l 20 -bw 2 -g 3"
-my2ndLauncher = "rofi -show drun"
+myLauncher = "rofi -show drun"
 myFileManager = "pcmanfm"
-myOfficeSuite = "~/Downloads/DesktopEditors-x86_64.AppImage"
 
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
@@ -70,15 +68,12 @@ myKeys = [
     -- Run Applications
       ("M-S-<Return>", spawn (myTerminal)) 
     , ("M-p", spawn (myLauncher))           
-    , ("M-S-p", spawn (my2ndLauncher))           
-    , ("M-o", spawn (myOfficeSuite))           
-    , ("M-f", spawn (myFileManager))       
+    , ("M-e", spawn (myFileManager))       
     , ("M-b", spawn (myBrowser))
-    , ("M-c", spawn "code")
-    , ("M-S-s", spawn "flameshot gui") -- Screenshot Tool
-    , ("M-S-x", spawn "clearine") -- Arcolinux Betterlockscreen
-    , ("M-<F1>", spawn "feh --bg-scale --randomize ~/Pictures/Wallpapers/*") -- Set Random Wallpaper with Feh
-    , ("M-<F2>", spawn "feh --bg-scale --randomize /usr/share/backgrounds/archlinux/*") -- Set Random Wallpaper with Feh
+    , ("M-S-s", spawn "flameshot gui")
+    , ("M-S-x", spawn "clearine")
+    , ("M-<F1>", spawn "feh --bg-scale --randomize ~/Pictures/Wallpapers/*") 
+    , ("M-<F2>", spawn "feh --bg-scale --randomize /usr/share/backgrounds/archlinux/*")
 
     -- Volume Keys
     , ("<XF86AudioRaiseVolume>", spawn "amixer -D pulse sset Master 10%+")
@@ -159,6 +154,7 @@ myManageHook = composeAll
     , resource  =? "kdesktop"       --> doIgnore
     , className =? "Clearine" --> doFullFloat
     , className =? "Evince" --> doFullFloat
+    , className =? "Galculator" --> doCenterFloat
     , isDialog --> doCenterFloat
     ]
 ------------------------------------------------------------------------

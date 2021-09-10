@@ -1,7 +1,12 @@
 /** Basic config file **/
 
 configuration {
-  theme: "/usr/share/rofi/themes/Arc-Dark.rasi";
+  theme: "~/.config/rofi/Arc-Dark.rasi";
+  font: "Mononoki Nerd Font 12";
   show-icons: true;
-  width: 25;
+  icon-theme: "Papirus";
+  display-drun: "Applications";
+  drun-display-format: "{name}";
+  disable-history: false;
+  sidebar-mode: false;
 }
