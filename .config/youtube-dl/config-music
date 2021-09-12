@@ -1,0 +1,2 @@
+# Save all music under Music directory in your home directory
+-o ~/Music/%(title)s.%(ext)s
