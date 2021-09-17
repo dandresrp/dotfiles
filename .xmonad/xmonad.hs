@@ -73,7 +73,8 @@ myKeys = [
     , ("M-e", spawn (myFileManager))       
     , ("M-b", spawn (myBrowser))
     , ("M-S-s", spawn "flameshot gui")
-    , ("M-S-x", spawn "clearine")
+    --, ("M-S-x", spawn "clearine")
+    , ("M-S-x", spawn "arcolinux-logout")
     , ("M-<F1>", spawn "feh --bg-scale --randomize ~/Pictures/Wallpapers/*") 
     , ("M-<F2>", spawn "feh --bg-scale --randomize /usr/share/backgrounds/archlinux/*")
 
@@ -155,6 +156,7 @@ myManageHook = composeAll
     [ resource  =? "desktop_window" --> doIgnore
     , resource  =? "kdesktop"       --> doIgnore
     , className =? "Clearine" --> doFullFloat
+    , className =? "Arcologout.py" --> doFullFloat
     , className =? "Evince" --> doFullFloat
     , className =? "Galculator" --> doCenterFloat
     , isDialog --> doCenterFloat
@@ -169,7 +171,7 @@ myLogHook = return()
 
 ------------------------------------------------------------------------
 main = do
-    --xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"
+    xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"
     xmonad $ ewmh defaults
 
 defaults = def {
