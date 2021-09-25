@@ -2,11 +2,12 @@
 
 configuration {
   theme: "~/.config/rofi/Arc-Dark.rasi";
-  font: "Mononoki Nerd Font 12";
+  font: "Mononoki Nerd Font 13";
   show-icons: true;
   icon-theme: "Papirus";
   display-drun: "Applications";
   drun-display-format: "{name}";
   disable-history: false;
   sidebar-mode: false;
+  display-window: "Window Switcher";
 }
