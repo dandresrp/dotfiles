@@ -73,8 +73,8 @@ myKeys = [
     , ("M-e", spawn (myFileManager))       
     , ("M-b", spawn (myBrowser))
     , ("M-S-s", spawn "flameshot gui")
-    --, ("M-S-x", spawn "clearine")
-    , ("M-S-x", spawn "arcolinux-logout")
+    , ("M-S-x", spawn "clearine")
+    --, ("M-S-x", spawn "arcolinux-logout")
     , ("M-<F1>", spawn "feh --bg-scale --randomize ~/Pictures/Wallpapers/*") 
     , ("M-<F2>", spawn "feh --bg-scale --randomize /usr/share/backgrounds/archlinux/*")
 

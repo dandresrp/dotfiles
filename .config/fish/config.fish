@@ -32,13 +32,10 @@ alias clt='clear && lt'
 alias cl.='clear && l.'
 
 # pacman
-#alias install='sudo pacman -S'
-#alias remove='sudo pacman -R'
-#alias full-remove='sudo pacman -Rcns'
-#alias update='sudo pacman -Syy'
-alias upgrade='sudo aura -Syu && sudo aura -Au'
+alias install='sudo pacman -S'
+alias remove='sudo pacman -R'
 alias unlock='sudo rm /var/lib/pacman/db.lck'
-alias cleanup='sudo aura -Oj'
+alias cleanup='sudo pacman -R (pacman -Qtdq)'
 
 # git
 alias gs='git status'
@@ -80,7 +77,7 @@ alias vrofi="sudo $EDITOR ~/.config/rofi/config.rasi"
 alias vxmonad="sudo $EDITOR ~/.xmonad/xmonad.hs"
 alias vxmobar="sudo $EDITOR ~/.config/xmobar/xmobarrc"
 alias vawesome="sudo $EDITOR ~/.config/awesome/rc.lua"
-alias sqtile="sudo $EDITOR ~/.config/qtile/config.py"
+alias vqtile="sudo $EDITOR ~/.config/qtile/config.py"
 alias valacritty="sudo $EDITOR ~/.config/alacritty/alacritty.yml"
 alias vb="$EDITOR ~/.bashrc"
 alias vf="$EDITOR ~/.config/fish/config.fish"
