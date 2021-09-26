@@ -45,7 +45,9 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
+-- beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
+local theme_path = string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"), "default")
+beautiful.init(theme_path)
 
 -- This is used later as the default terminal and editor to run.
 terminal = "alacritty"
@@ -109,7 +111,7 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- {{{ Wibar
 -- Create a textclock widget
-format = " %I:%M %p - %d/%m/%-y "
+format = "%I:%M %p - %d/%m/%-y"
 refresh = 1
 mytextclock = wibox.widget.textclock(format, refresh)
 
@@ -214,7 +216,8 @@ awful.screen.connect_for_each_screen(function(s)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            --mykeyboardlayout,
+            spacing = 6,
+	    --mykeyboardlayout,
             wibox.widget.systray(),
             mytextclock,
             s.mylayoutbox,
@@ -293,6 +296,22 @@ globalkeys = gears.table.join(
    
     awful.key({ modkey, "Shift"   }, "x", function () awful.util.spawn("clearine") end,
     	      {description = "run clearine", group = "launcher"}),
+
+    -- Volume Keys
+   awful.key({}, "XF86AudioLowerVolume", function ()
+     awful.util.spawn("amixer -q -D pulse sset Master 5%-", false) end),
+   awful.key({}, "XF86AudioRaiseVolume", function ()
+     awful.util.spawn("amixer -q -D pulse sset Master 5%+", false) end),
+   awful.key({}, "XF86AudioMute", function ()
+     awful.util.spawn("amixer -D pulse set Master 1+ toggle", false) end),
+   
+   -- Media Keys
+   awful.key({}, "XF86AudioPlay", function()
+     awful.util.spawn("playerctl play-pause", false) end),
+   awful.key({}, "XF86AudioNext", function()
+     awful.util.spawn("playerctl next", false) end),
+   awful.key({}, "XF86AudioPrev", function()
+     awful.util.spawn("playerctl previous", false) end),
 
     -- End of My Keybindings
     --------------------------------------------------------------------------------

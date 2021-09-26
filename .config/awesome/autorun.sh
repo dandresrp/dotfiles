@@ -13,6 +13,7 @@ xsetroot -cursor_name left_ptr &
 #starting utility applications at boot time
 run xfce4-power-manager &
 numlockx on &
+volumeicon &
 picom --config $HOME/.config/awesome/picom.conf &
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 
