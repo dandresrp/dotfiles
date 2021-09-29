@@ -14,7 +14,9 @@ xsetroot -cursor_name left_ptr &
 run xfce4-power-manager &
 numlockx on &
 picom --config $HOME/.xmonad/picom.conf &
-/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+/usr/bin/lxpolkit &
+lxsession &
+#/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 /usr/lib/xfce4/notifyd/xfce4-notifyd &
 #/usr/bin/dunst &
 

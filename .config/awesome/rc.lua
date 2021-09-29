@@ -53,6 +53,8 @@ beautiful.init(theme_path)
 terminal = "alacritty"
 browser = "google-chrome-stable"
 filemanager = "pcmanfm"
+launcher = "rofi -show drun"
+switcher = "rofi -show window"
 editor = os.getenv("EDITOR") or "nano"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -257,8 +259,8 @@ globalkeys = gears.table.join(
         end,
         {description = "focus previous by index", group = "client"}
     ),
-    awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
-              {description = "show main menu", group = "awesome"}),
+    --awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
+              --{description = "show main menu", group = "awesome"}),
 
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
@@ -291,9 +293,12 @@ globalkeys = gears.table.join(
     awful.key({ modkey,           }, "e", function () awful.util.spawn(filemanager) end,
     	      {description = "open file manager", group = "launcher"}),
 
-    awful.key({ modkey,           }, "p", function () awful.util.spawn("rofi -show drun") end,
-    	      {description = "run rofi", group = "launcher"}),
+    awful.key({ modkey,           }, "p", function () awful.util.spawn(launcher) end,
+    	      {description = "run rofi app launcher", group = "launcher"}),
    
+    awful.key({ modkey,           }, "w", function () awful.util.spawn(switcher) end,
+    	      {description = "run rofi window switcher", group = "launcher"}),
+
     awful.key({ modkey, "Shift"   }, "x", function () awful.util.spawn("clearine") end,
     	      {description = "run clearine", group = "launcher"}),
 
@@ -362,10 +367,10 @@ globalkeys = gears.table.join(
                     history_path = awful.util.get_cache_dir() .. "/history_eval"
                   }
               end,
-              {description = "lua execute prompt", group = "awesome"}),
+              {description = "lua execute prompt", group = "awesome"})
     -- Menubar
-    awful.key({ modkey }, "o", function() menubar.show() end,
-              {description = "show the menubar", group = "launcher"})
+    --awful.key({ modkey }, "o", function() menubar.show() end,
+              --{description = "show the menubar", group = "launcher"})
 )
 
 clientkeys = gears.table.join(

@@ -670,7 +670,7 @@ schemes:
 #colors: *tokyo-night
 #colors: *tokyo-night-storm
 #colors: *dracula
-#colors: *snazzy
+colors: *snazzy
 #colors: *nord
 #colors: *horizon-dark
 #colors: *doom-one
@@ -680,7 +680,7 @@ schemes:
 #colors: *challenger-deep
 #colors: *cobalt2
 #colors: *one-dark
-colors: *palenight
+#colors: *palenight
 #colors: *taerminal
 #colors: *thelovelace
 
