@@ -1,6 +1,7 @@
 /** Basic config file **/
 
 configuration {
+  modi: "run,ssh,window,drun";
   theme: "~/.config/rofi/Arc-Dark.rasi";
   font: "Mononoki Nerd Font 13";
   show-icons: true;

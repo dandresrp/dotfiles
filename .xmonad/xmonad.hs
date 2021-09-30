@@ -38,7 +38,7 @@ myTerminal = "alacritty"
 myBrowser = "google-chrome-stable"
 myAppLauncher = "rofi -show drun"
 myWindowSwitcher = "rofi -show window"
-myFileManager = "pcmanfm"
+myFileManager = "thunar"
 
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
@@ -46,7 +46,7 @@ myFocusFollowsMouse = True
 myClickJustFocuses :: Bool
 myClickJustFocuses = False
 
-myBorderWidth = 1
+myBorderWidth = 2
 
 myModMask = mod4Mask
 
@@ -58,7 +58,7 @@ myFocusedBorderColor = "#999"
 
 myStartupHook :: X ()
 myStartupHook = do
-    spawn "$HOME/.xmonad/autostart.sh"
+    spawn "$HOME/.xmonad/autostart"
     setWMName "LG3D"
 
 ------------------------------------------------------------------------

@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+## Cursor active at boot
+xsetroot -cursor_name left_ptr &
+
+## Restore Wallpaper
+~/.fehbg &
+#nitrogen --restore &
+
+## xfce4-settings daemon
+xfsettingsd &
+
+## Polkit agent
+/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+
+## Enable power management
+exec xfce4-power-manager &
+
+## Start Compositing Manager
+exec picom --config $HOME/.xmonad/picom.conf &
+
+## Notification Daemon
+exec dunst &
+#/usr/lib/xfce4/notifyd/xfce4-notifyd &
+
+## File Manager Daemon
+exec thunar --daemon &
+#exec pcmanfm -d &
+
+## Set keyboard layout
+setxkbmap us -variant altgr-intl &
+
+## Turn ON numlock key
+numlockx on &
+
+## Run on boot other services
+udiskie &
+dropbox &
