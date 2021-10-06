@@ -38,7 +38,7 @@ myTerminal = "alacritty"
 myBrowser = "google-chrome-stable"
 myAppLauncher = "rofi -show drun"
 myWindowSwitcher = "rofi -show window"
-myFileManager = "thunar"
+myFileManager = "pcmanfm"
 
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
@@ -159,6 +159,7 @@ myManageHook = composeAll
     , className =? "Arcologout.py" --> doFullFloat
     , className =? "Evince" --> doFullFloat
     , className =? "Galculator" --> doCenterFloat
+    , className =? "Alacritty" --> doCenterFloat
     , isDialog --> doCenterFloat
     ]
 ------------------------------------------------------------------------

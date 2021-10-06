@@ -17,10 +17,6 @@ end
 # bat
 # alias cat='bat'
 
-# feh image viewer
-
-alias view='feh --scale-down --auto-zoom -d -S filename $PWD'
-
 # Changing "ls" to "exa"
 alias ls='exa -al --color=always --group-directories-first' # my preferred listing
 alias la='exa -a --color=always --group-directories-first'  # all files and dirs
@@ -138,4 +134,4 @@ alias udb='sudo updatedb'
 starship init fish | source
 
 ### NEOFETCH ###
-neofetch
+#neofetch

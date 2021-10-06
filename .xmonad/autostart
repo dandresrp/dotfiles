@@ -7,11 +7,8 @@ xsetroot -cursor_name left_ptr &
 ~/.fehbg &
 #nitrogen --restore &
 
-## xfce4-settings daemon
-xfsettingsd &
-
 ## Polkit agent
-/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+lxsession &
 
 ## Enable power management
 exec xfce4-power-manager &
@@ -24,8 +21,8 @@ exec dunst &
 #/usr/lib/xfce4/notifyd/xfce4-notifyd &
 
 ## File Manager Daemon
-exec thunar --daemon &
-#exec pcmanfm -d &
+#exec thunar --daemon &
+exec pcmanfm -d &
 
 ## Set keyboard layout
 setxkbmap us -variant altgr-intl &
@@ -35,4 +32,3 @@ numlockx on &
 
 ## Run on boot other services
 udiskie &
-dropbox &
