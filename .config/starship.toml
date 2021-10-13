@@ -20,6 +20,9 @@ disabled = false
 truncation_length = 8
 truncation_symbol = "…/"
 
+[cmd_duration]
+disabled = true
+
 # Disable the package module, hiding it from the prompt completely
 [package]
 disabled = true
