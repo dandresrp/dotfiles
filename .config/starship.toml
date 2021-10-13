@@ -1,38 +1,25 @@
 # Don't print a new line at the start of the prompt
-add_newline = true 
+add_newline = false 
 
 # Make prompt a single line instead of two lines
 [line_break]
-disabled = false
-
-# Replace the "❯" symbol in the prompt with "➜"
-# [character]                         # The name of the module we are configuring is "character"
-# success_symbol = "[➜](bold green)"  # The "success_symbol" is set to "➜" with color "bold green"
+disabled = true
 
 [username]
-format = "[$user]($style)@DEKU "
+format = "[$user]($style)"
 disabled = false
 show_always = true
 
-[time]
-disabled = true
-use_12hr = true
-time_format = "%I:%M %p"
+[hostname]
+ssh_only = false
+format =  "@[$hostname](bold green) in "
+trim_at = ".companyname.com"
+disabled = false
 
-[cmd_duration]
-disabled = true
-
-[nodejs]
-disabled = true
-
-[python]
-disabled = true
-
-[shell]
-disabled = true
-fish_indicator = ""
+[directory]
+truncation_length = 8
+truncation_symbol = "…/"
 
 # Disable the package module, hiding it from the prompt completely
 [package]
 disabled = true
-

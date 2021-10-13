@@ -6,7 +6,7 @@ set -U fish_user_paths $HOME/.local/bin $HOME/Applications $fish_user_paths
 set fish_greeting 
 set TERM "xterm-256color"
 export EDITOR='vim'
-export EDITOR2='subl'
+export EDITOR2='code'
 
 if status is-interactive
     # Commands to run in interactive sessions can go here
