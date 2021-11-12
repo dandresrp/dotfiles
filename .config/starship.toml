@@ -3,22 +3,15 @@ add_newline = false
 
 # Make prompt a single line instead of two lines
 [line_break]
-disabled = false
+disabled = true 
 
-[username]
-format = "[$user]($style)"
-disabled = false
-show_always = true
-
-[hostname]
-ssh_only = false
-format =  "@[$hostname](bold green) in "
-trim_at = ".companyname.com"
-disabled = false
+[character]
+success_symbol = "[➜](bold green)"
+error_symbol = "[➜](bold red)"
 
 [directory]
-truncation_length = 8
-truncation_symbol = "…/"
+truncation_length = 5
+format = "[$path]($style)[$lock_symbol]($lock_style) "
 
 [cmd_duration]
 disabled = true

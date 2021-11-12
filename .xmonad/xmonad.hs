@@ -10,6 +10,7 @@ import XMonad.Layout.WindowArranger
 import XMonad.Layout.Spacing
 import XMonad.Layout.NoBorders
 import XMonad.Layout.ShowWName
+import XMonad.Layout.LayoutModifier
 
 -- UTILS
 import XMonad.Util.Run
@@ -38,7 +39,7 @@ myTerminal = "alacritty"
 myBrowser = "google-chrome-stable"
 myAppLauncher = "rofi -show drun"
 myWindowSwitcher = "rofi -show window"
-myFileManager = "pcmanfm"
+myFileManager = "thunar"
 
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
@@ -46,7 +47,7 @@ myFocusFollowsMouse = True
 myClickJustFocuses :: Bool
 myClickJustFocuses = False
 
-myBorderWidth = 2
+myBorderWidth = 1
 
 myModMask = mod4Mask
 
@@ -74,9 +75,9 @@ myKeys = [
     , ("M-b", spawn (myBrowser))
     , ("M-S-s", spawn "flameshot gui")
     , ("M-S-x", spawn "clearine")
+    , ("M-S-<Esc>", spawn "mate-control-center")
     --, ("M-S-x", spawn "arcolinux-logout")
     , ("M-<F1>", spawn "feh --bg-scale --randomize ~/Pictures/Wallpapers/*") 
-    , ("M-<F2>", spawn "feh --bg-scale --randomize /usr/share/backgrounds/archlinux/*")
 
     -- Volume Keys
     , ("<XF86AudioRaiseVolume>", spawn "amixer -D pulse sset Master 10%+")
@@ -117,16 +118,27 @@ myKeys = [
 
     -- XMonad
     , ("M-S-q", io (exitWith ExitSuccess)) -- Quit XMonad
-    , ("M-q", spawn "xmonad --recompile; killall xmobar; xmonad --restart") -- Restart XMonad
+    , ("M-q", spawn "xmonad --recompile; xmonad --restart") -- Restart XMonad
     ]
 
 ------------------------------------------------------------------------
 -- Layouts:
 
+--Makes setting the spacingRaw simpler to write. The spacingRaw module adds a configurable amount of space around windows.
+mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
+mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
+
+-- Below is a variation of the above except no borders are applied
+-- if fewer than two windows. So a single window has no gaps.
+mySpacing' :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
+mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
+
 myLayout =  mouseResize $ windowArrange (tiled ||| smartBorders Full)
   where
      -- default tiling algorithm partitions the screen into two panes
-     tiled   = avoidStruts $ smartBorders $ smartSpacing 4 $ Tall nmaster delta ratio 
+     tiled   =   smartBorders 
+               $ mySpacing 6 
+               $ Tall nmaster delta ratio 
 
      -- The default number of windows in the master pane
      nmaster = 1
@@ -159,7 +171,6 @@ myManageHook = composeAll
     , className =? "Arcologout.py" --> doFullFloat
     , className =? "Evince" --> doFullFloat
     , className =? "Galculator" --> doCenterFloat
-    , className =? "Alacritty" --> doCenterFloat
     , isDialog --> doCenterFloat
     ]
 ------------------------------------------------------------------------
@@ -172,7 +183,7 @@ myLogHook = return()
 
 ------------------------------------------------------------------------
 main = do
-    xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"
+    --xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"
     xmonad $ ewmh defaults
 
 defaults = def {

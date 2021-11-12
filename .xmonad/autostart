@@ -4,8 +4,8 @@
 xsetroot -cursor_name left_ptr &
 
 ## Restore Wallpaper
-~/.fehbg &
-#nitrogen --restore &
+#~/.fehbg &
+nitrogen --restore &
 
 ## Polkit agent
 lxsession &
@@ -14,15 +14,15 @@ lxsession &
 exec xfce4-power-manager &
 
 ## Start Compositing Manager
-exec picom --config $HOME/.xmonad/picom.conf &
+exec picom --experimental-backends --config $HOME/.xmonad/picom-02.conf &
 
 ## Notification Daemon
 exec dunst &
 #/usr/lib/xfce4/notifyd/xfce4-notifyd &
 
 ## File Manager Daemon
-#exec thunar --daemon &
-exec pcmanfm -d &
+thunar --daemon &
+#exec pcmanfm -d &
 
 ## Set keyboard layout
 setxkbmap us -variant altgr-intl &
