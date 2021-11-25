@@ -46,8 +46,8 @@ window:
   # Blank space added around the window in pixels. This padding is scaled
   # by DPI and the specified value is always added at both opposing sides.
   padding:
-    x: 20
-    y: 20
+    x: 10
+    y: 10
 
   # Spread additional padding evenly around the terminal content.
 dynamic_padding:
@@ -79,7 +79,7 @@ dynamic_padding:
   #title: Alacritty
 
   # Allow terminal applications to change Alacritty's window title.
-  #dynamic_title: true
+  #dynamic_title: false
 
   # Window class (Linux/BSD only):
   #class:
@@ -699,7 +699,7 @@ schemes:
 # Colors
 #colors: *tokyo-night
 #colors: *tokyo-night-storm
-colors: *dracula
+#colors: *dracula
 #colors: *snazzy
 #colors: *nord
 #colors: *horizon-dark
@@ -710,7 +710,7 @@ colors: *dracula
 #colors: *challenger-deep
 #colors: *cobalt2
 #colors: *one-dark
-#colors: *palenight
+colors: *palenight
 #colors: *taerminal
 #colors: *thelovelace
 
@@ -953,8 +953,8 @@ cursor:
 #   - (macOS) /bin/bash --login
 #   - (Linux/BSD) user login shell
 #   - (Windows) powershell
-shell:
-  program: /bin/fish
+#shell:
+# program: /bin/fish
 #  args:
 #    - --login
 
