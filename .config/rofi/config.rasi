@@ -3,7 +3,7 @@
 configuration {
   modi: "run,ssh,window,drun";
   theme: "~/.config/rofi/Arc-Dark.rasi";
-  font: "Mononoki Nerd Font 13";
+  font: "Ubuntu Regular 12";
   show-icons: true;
   icon-theme: "Papirus";
   display-drun: "Applications";

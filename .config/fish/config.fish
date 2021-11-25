@@ -32,8 +32,8 @@ alias clt='clear && lt'
 alias cl.='clear && l.'
 
 # pacman
-alias install='sudo pacman -S'
-alias remove='sudo pacman -R'
+#alias install='sudo pacman -S'
+#alias remove='sudo pacman -R'
 alias unlock='sudo rm /var/lib/pacman/db.lck'
 alias cleanup='sudo pacman -R (pacman -Qtdq)'
 
@@ -94,7 +94,7 @@ alias srofi="$EDITOR2 ~/.config/rofi/config.rasi && exit"
 alias sxmonad="$EDITOR2 ~/.xmonad/xmonad.hs && exit"
 alias sxmobar="$EDITOR2 ~/.config/xmobar/xmobarrc && exit"
 alias sawesome="$EDITOR2 ~/.config/awesome/rc.lua && exit"
-alias sqtile="$EDITOR2 ~/.config/qtile/config.py && exit"
+alias sqtile="$EDITOR2 ~/.config/qtile/ && exit"
 alias salacritty="$EDITOR2 ~/.config/alacritty/alacritty.yml && exit"
 alias sb="$EDITOR2 ~/.bashrc && exit"
 alias sf="$EDITOR2 ~/.config/fish/config.fish && exit"
@@ -134,4 +134,4 @@ alias udb='sudo updatedb'
 starship init fish | source
 
 ### NEOFETCH ###
-#neofetch
+neofetch

@@ -4,10 +4,11 @@
 xsetroot -cursor_name left_ptr &
 
 # Polkit agent
-/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+lxsession &
+#/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 
 # Notification Daemon
-exec dunst &
+dunst &
 #/usr/lib/xfce4/notifyd/xfce4-notifyd &
 
 # Enable power management
@@ -16,6 +17,7 @@ xfce4-power-manager &
 nitrogen --restore &
 picom --config $HOME/.config/qtile/picom.conf &
 volumeicon &
+thunar --daemon &
 
 ## Set keyboard layout
 setxkbmap us -variant altgr-intl &

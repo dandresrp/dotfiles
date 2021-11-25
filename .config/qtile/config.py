@@ -27,7 +27,6 @@
 import os
 import subprocess
 from typing import List  # noqa: F401
-
 from libqtile import qtile
 from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
@@ -45,8 +44,9 @@ mod = "mod4"
 terminal = "alacritty -e fish"
 browser = "google-chrome-stable"
 launcher = "rofi -show drun"
-filemanager = "thunar"
+filemanager = "pcmanfm"
 sessionmanager = "clearine"
+screenshots = "flameshot gui"
 
 keys = [
     # Switch between windows
@@ -78,6 +78,13 @@ keys = [
     Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
     Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
 
+    # Grow windows for MonadTall Layout
+    Key([mod], "i", lazy.layout.grow()),
+    Key([mod], "m", lazy.layout.shrink()),
+    Key([mod], "n", lazy.layout.normalize()),
+    Key([mod], "o", lazy.layout.maximize()),
+    Key([mod, "shift"], "space", lazy.layout.flip()),
+
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
     # Unsplit = 1 window displayed, like Max layout, but still with
@@ -91,6 +98,15 @@ keys = [
     Key([mod], "e", lazy.spawn(filemanager), desc="Launch file manager"),
     Key([mod], "p", lazy.spawn(launcher), desc="Launch app launcher"),
     Key([mod], "x", lazy.spawn(sessionmanager), desc="Launch session manager"),
+    Key([mod, "shift"], "s", lazy.spawn(
+        screenshots), desc="Launch screenshot tool"),
+
+    # Sound
+    Key([], "XF86AudioMute", lazy.spawn("amixer -D pulse sset Master toggle")),
+    Key([], "XF86AudioLowerVolume", lazy.spawn(
+        "amixer -D pulse sset Master 10%-")),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn(
+        "amixer -D pulse sset Master 10%+")),
 
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
@@ -120,14 +136,15 @@ for i in groups:
     ])
 
 layouts = [
-    layout.Columns(border_focus='#676E95', border_width=1),
+    layout.MonadTall(border_focus='#676E95', border_width=1,
+                     margin=10, single_margin=0, single_border_width=0),
+    # layout.MonadWide(border_focus='#676E95', border_width=1, margin=6, single_margin=0, single_border_width=0),
+    # layout.Columns(border_focus='#676E95', border_width=1, margin=6, margin_on_single=0),
     layout.Max(),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.Matrix(),
-    # layout.MonadTall(),
-    # layout.MonadWide(),
     # layout.RatioTile(),
     # layout.Tile(),
     # layout.TreeTab(),
@@ -146,10 +163,12 @@ screens = [
     Screen(
         top=bar.Bar(
             [
+                widget.TextBox(text='', fontsize=18),
                 widget.GroupBox(active='#FFFFFF', inactive='#515772'),
                 # widget.Prompt(),
                 # widget.WindowName(),
-                widget.TaskList(),
+                widget.Spacer(),
+                # widget.TaskList(),
                 widget.Chord(
                     chords_colors={
                         'launch': ("#ff0000", "#ffffff"),
@@ -157,16 +176,13 @@ screens = [
                     name_transform=lambda name: name.upper(),
                 ),
                 widget.Systray(icon_size=14, padding=6),
-                widget.CheckUpdates(
-                    update_interval=1800,
-                    distro="Arch_checkupdates",
-                    display_format="{updates} Updates",
-                    mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(
-                        terminal + ' -e sudo pacman -Syu')}
-
-                ),
+                # widget.CheckUpdates(
+                #     update_interval=1800,
+                #     distro="Arch_checkupdates",
+                #     display_format="  {updates} Updates",
+                # ),
                 widget.Clock(format=' %I:%M %p - %d/%m/%Y'),
-                widget.CurrentLayout(),
+                widget.CurrentLayoutIcon(scale=0.8),
                 # widget.QuickExit(),
             ],
             size=20, opacity=1.0, background='#292D3E',
@@ -174,7 +190,7 @@ screens = [
     ),
 ]
 
-# Drag floating layouts.
+# Drag  oating layouts.
 mouse = [
     Drag([mod], "Button1", lazy.window.set_position_floating(),
          start=lazy.window.get_position()),
