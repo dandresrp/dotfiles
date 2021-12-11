@@ -2,13 +2,14 @@
 
 configuration {
   modi: "run,ssh,window,drun";
-  theme: "~/.config/rofi/Arc-Dark.rasi";
-  font: "Ubuntu Regular 12";
+  font: "Roboto Regular 12";
   show-icons: true;
   icon-theme: "Papirus";
+  application-fallback-icon: "Sardi-Arc";
   display-drun: "Applications";
   drun-display-format: "{name}";
   disable-history: false;
   sidebar-mode: false;
   display-window: "Window Switcher";
 }
+@theme "~/.config/rofi/Arc-Dark.rasi"

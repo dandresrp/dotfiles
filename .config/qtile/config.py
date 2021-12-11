@@ -1,44 +1,12 @@
-# Copyright (c) 2010 Aldo Cortesi
-# Copyright (c) 2010, 2014 dequis
-# Copyright (c) 2012 Randall Ma
-# Copyright (c) 2012-2014 Tycho Andersen
-# Copyright (c) 2012 Craig Barnes
-# Copyright (c) 2013 horsik
-# Copyright (c) 2013 Tao Sauvage
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-
 import os
 import subprocess
 from typing import List  # noqa: F401
 from libqtile import qtile
 from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile.backend.base import Window
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
-
-
-@hook.subscribe.startup_once
-def autostart():
-    home = os.path.expanduser('~/.config/qtile/autostart.sh')
-    subprocess.call([home])
-
 
 mod = "mod4"
 terminal = "alacritty -e fish"
@@ -47,6 +15,11 @@ launcher = "rofi -show drun"
 filemanager = "pcmanfm"
 sessionmanager = "clearine"
 screenshots = "flameshot gui"
+
+@hook.subscribe.startup_once
+def autostart():
+    home = os.path.expanduser('~/.config/qtile/autostart.sh')
+    subprocess.call([home])
 
 keys = [
     # Switch between windows
@@ -85,15 +58,21 @@ keys = [
     Key([mod], "o", lazy.layout.maximize()),
     Key([mod, "shift"], "space", lazy.layout.flip()),
 
+    # Enable/disable floating focused window
+    Key([mod], "t", lazy.window.disable_floating()),
+    Key([mod], "f", lazy.window.enable_floating()),
+
+    Key([mod, "shift"], "f", lazy.window.toggle_fullscreen()),
+
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
     # Unsplit = 1 window displayed, like Max layout, but still with
     # multiple stack panes
-    Key([mod, "shift"], "Return", lazy.layout.toggle_split(),
+    Key([mod], "Return", lazy.layout.toggle_split(),
         desc="Toggle between split and unsplit sides of stack"),
 
     # Launch programs
-    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
+    Key([mod, "shift"], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     Key([mod], "b", lazy.spawn(browser), desc="Launch browser"),
     Key([mod], "e", lazy.spawn(filemanager), desc="Launch file manager"),
     Key([mod], "p", lazy.spawn(launcher), desc="Launch app launcher"),
@@ -118,26 +97,32 @@ keys = [
         desc="Spawn a command using a prompt widget"),
 ]
 
-groups = [Group(i) for i in "123456789"]
+groups = [Group("DEV", layout='monadtall'),
+          Group("WWW", layout='monadtall'),
+          Group("SYS", layout='monadtall'),
+          Group("DOC", layout='monadtall'),
+          Group("VBOX", layout='monadtall'),
+          Group("CHAT", layout='monadtall'),
+          Group("MUS", layout='monadtall'),
+          Group("VID", layout='monadtall'),
+          Group("GFX", layout='floating')]
 
-for i in groups:
-    keys.extend([
-        # mod1 + letter of group = switch to group
-        Key([mod], i.name, lazy.group[i.name].toscreen(),
-            desc="Switch to group {}".format(i.name)),
+# Allow MODKEY+[0 through 9] to bind to groups, see https://docs.qtile.org/en/stable/manual/config/groups.html
+# MOD4 + index Number : Switch to Group[index]
+# MOD4 + shift + index Number : Send active window to another Group
+from libqtile.dgroups import simple_key_binder
+dgroups_key_binder = simple_key_binder("mod4")
 
-        # mod1 + shift + letter of group = switch to & move focused window to group
-        Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=True),
-            desc="Switch to & move focused window to group {}".format(i.name)),
-        # Or, use below if you prefer not to switch to that group.
-        # # mod1 + shift + letter of group = move focused window to group
-        # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
-        #     desc="move focused window to group {}".format(i.name)),
-    ])
+layout_theme = {"border_width": 2,
+                "margin": 8,
+                "border_focus": "#e6e6e6"
+}
 
 layouts = [
-    layout.MonadTall(border_focus='#676E95', border_width=1,
-                     margin=10, single_margin=0, single_border_width=0),
+    layout.MonadTall(**layout_theme,
+                     single_margin=0,
+                     single_border_width=0
+                     ),
     # layout.MonadWide(border_focus='#676E95', border_width=1, margin=6, single_margin=0, single_border_width=0),
     # layout.Columns(border_focus='#676E95', border_width=1, margin=6, margin_on_single=0),
     layout.Max(),
@@ -153,8 +138,8 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font='sans',
-    fontsize=12,
+    font='Ubuntu Mono',
+    fontsize=14,
     padding=3,
 )
 extension_defaults = widget_defaults.copy()
@@ -163,29 +148,46 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-                widget.TextBox(text='', fontsize=18),
-                widget.GroupBox(active='#FFFFFF', inactive='#515772'),
-                # widget.Prompt(),
-                # widget.WindowName(),
+                # widget.TextBox(text='', fontsize=18),
+                widget.GroupBox(
+                    active='#FFFFFF',
+                    inactive='#ABB2BF',
+                    highlight_method='line',
+                    this_current_screen_border='#00ADB5'
+                    ),
                 widget.Spacer(),
-                # widget.TaskList(),
-                widget.Chord(
-                    chords_colors={
-                        'launch': ("#ff0000", "#ffffff"),
-                    },
-                    name_transform=lambda name: name.upper(),
-                ),
-                widget.Systray(icon_size=14, padding=6),
+                widget.Systray(
+                    icon_size= 16,
+                    padding= 10
+                    ),
                 # widget.CheckUpdates(
                 #     update_interval=1800,
                 #     distro="Arch_checkupdates",
                 #     display_format="  {updates} Updates",
                 # ),
-                widget.Clock(format=' %I:%M %p - %d/%m/%Y'),
-                widget.CurrentLayoutIcon(scale=0.8),
-                # widget.QuickExit(),
+                widget.Sep(
+                    linewidth= 5,
+                    foreground= '#222831'
+                    ),
+                widget.Volume(
+                    fmt='VOL {}',
+                    step= 10
+                ),
+                widget.Sep(
+                    linewidth= 5,
+                    foreground= '#222831'
+                    ),
+                widget.Clock(
+                    format='%I:%M %p - %d/%m/%Y'
+                    ),
+                widget.Sep(
+                    linewidth= 5,
+                    foreground= '#222831'
+                    )
             ],
-            size=20, opacity=1.0, background='#292D3E',
+            size=24,
+            opacity=1.0,
+            background='#222831',
         ),
     ),
 ]
@@ -199,7 +201,7 @@ mouse = [
     Click([mod], "Button2", lazy.window.bring_to_front())
 ]
 
-dgroups_key_binder = None
+# dgroups_key_binder = None
 dgroups_app_rules = []  # type: List
 follow_mouse_focus = True
 bring_front_click = False
@@ -213,7 +215,8 @@ floating_layout = layout.Floating(float_rules=[
     Match(wm_class='ssh-askpass'),  # ssh-askpass
     Match(title='branchdialog'),  # gitk
     Match(title='pinentry'),  # GPG key password entry
-])
+    Match(wm_class='pinentry-gtk-2'), # GPG key password entry
+], border_focus='#676E95')
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 reconfigure_screens = True
