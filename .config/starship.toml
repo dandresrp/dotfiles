@@ -10,7 +10,7 @@ success_symbol = "[➜](bold green)"
 error_symbol = "[➜](bold red)"
 
 [directory]
-truncation_length = 5
+truncation_length = 1
 format = "[$path]($style)[$lock_symbol]($lock_style) "
 
 [cmd_duration]
