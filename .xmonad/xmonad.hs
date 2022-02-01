@@ -3,7 +3,9 @@
 
 import XMonad
 import Data.Monoid
+import Data.Maybe
 import System.Exit
+import System.IO
 
 -- LAYOUT
 import XMonad.Layout.WindowArranger
@@ -17,6 +19,7 @@ import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
 import XMonad.Util.WindowProperties
 import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.WorkspaceCompare
 
 -- ACTIONS
 import XMonad.Actions.MouseResize
@@ -28,18 +31,21 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.DynamicLog
 
 -- EXTRAS
 import Graphics.X11.ExtraTypes.XF86
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
+import Colors.DoomOne
+
 -- My Applications
-myTerminal = "alacritty"
+myTerminal = "alacritty -e fish"
 myBrowser = "google-chrome-stable"
 myAppLauncher = "rofi -show drun"
 myWindowSwitcher = "rofi -show window"
-myFileManager = "thunar"
+myFileManager = "pcmanfm"
 
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
@@ -54,12 +60,15 @@ myModMask = mod4Mask
 myNormalBorderColor  = "#333"
 myFocusedBorderColor = "#999"
 
+windowCount :: X (Maybe String)
+windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
+
 ------------------------------------------------------------------------
 -- Startup hook
 
 myStartupHook :: X ()
 myStartupHook = do
-    spawn "$HOME/.xmonad/autostart"
+    spawn "$HOME/.xmonad/autostart.sh"
     setWMName "LG3D"
 
 ------------------------------------------------------------------------
@@ -118,7 +127,7 @@ myKeys = [
 
     -- XMonad
     , ("M-S-q", io (exitWith ExitSuccess)) -- Quit XMonad
-    , ("M-q", spawn "xmonad --recompile; xmonad --restart") -- Restart XMonad
+    , ("M-q", spawn "xmonad --recompile; killall xmobar; xmonad --restart") -- Restart XMonad
     ]
 
 ------------------------------------------------------------------------
@@ -133,11 +142,11 @@ mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
 mySpacing' :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
 mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
 
-myLayout =  mouseResize $ windowArrange (tiled ||| smartBorders Full)
+myLayout =  mouseResize $ windowArrange $ avoidStruts (tiled ||| smartBorders Full)
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled   =   smartBorders 
-               $ mySpacing 6 
+               $ mySpacing 8 
                $ Tall nmaster delta ratio 
 
      -- The default number of windows in the master pane
@@ -152,6 +161,10 @@ myLayout =  mouseResize $ windowArrange (tiled ||| smartBorders Full)
 -- Workspaces
 
 myWorkspaces = ["sys","web","code","chat","doc","virt","mus","vid","gfx"]
+myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..]
+
+clickable ws = "<action=xdotool key super+"++show i++">"++ws++"</action>"
+    where i = fromJust $ M.lookup ws myWorkspaceIndices
 
 --myShowWNameTheme :: SWNConfig
 --myShowWNameTheme = def
@@ -174,19 +187,12 @@ myManageHook = composeAll
     , isDialog --> doCenterFloat
     ]
 ------------------------------------------------------------------------
--- Status bars and logging
 
--- Perform an arbitrary action on each internal state change or X event.
--- See the 'XMonad.Hooks.DynamicLog' extension for examples.
---
-myLogHook = return()
-
-------------------------------------------------------------------------
+main :: IO ()
 main = do
-    --xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"
-    xmonad $ ewmh defaults
-
-defaults = def {
+    xmproc <- spawnPipe ("xmobar ~/.xmonad/xmobarrc")
+    xmonad $ ewmh def 
+      {
         terminal           = myTerminal,
         focusFollowsMouse  = myFocusFollowsMouse,
         clickJustFocuses   = myClickJustFocuses,
@@ -195,10 +201,25 @@ defaults = def {
         workspaces         = myWorkspaces,
         normalBorderColor  = myNormalBorderColor,
         focusedBorderColor = myFocusedBorderColor,
-        --layoutHook         = showWName' myShowWNameTheme $ myLayout,
         layoutHook         = myLayout,
         manageHook         = myManageHook <+> manageDocks,
         handleEventHook    = handleEventHook def <+> fullscreenEventHook <+> docksEventHook,
-        logHook            = myLogHook,
+        logHook            = dynamicLogWithPP $ xmobarPP
+                           {
+                             ppOutput = hPutStrLn xmproc
+                           , ppCurrent = xmobarColor color06 "" . wrap
+                                         ("<box type=Bottom width=2 mb=2 color=" ++ color06 ++ ">") "</box>"
+                           , ppVisible = xmobarColor color06 "" . clickable
+                           , ppHidden = xmobarColor color05 "" . wrap
+                                       ("<box type=Top width=2 mt=2 color=" ++ color05 ++ ">") "</box>" . clickable
+                           , ppHiddenNoWindows = xmobarColor color05 ""  . clickable
+                           , ppTitle = const ""
+                           , ppLayout = const ""
+                           , ppSep =  "<fc=" ++ color09 ++ "> <fn=1>|</fn> </fc>"
+                           , ppUrgent = xmobarColor color02 "" . wrap "!" "!"
+                           --, ppExtras  = [windowCount]
+                           , ppOrder  = \(ws:l:t:ex) -> [ws,l]++ex++[t]
+
+                           },
         startupHook        = myStartupHook
-    } `additionalKeysP` myKeys
+      } `additionalKeysP` myKeys
