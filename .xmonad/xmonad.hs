@@ -146,7 +146,7 @@ myLayout =  mouseResize $ windowArrange $ avoidStruts (tiled ||| smartBorders Fu
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled   =   smartBorders 
-               $ mySpacing 8 
+               $ mySpacing 4 
                $ Tall nmaster delta ratio 
 
      -- The default number of windows in the master pane
@@ -178,12 +178,25 @@ clickable ws = "<action=xdotool key super+"++show i++">"++ws++"</action>"
 -- Window rules:
 
 myManageHook = composeAll
-    [ resource  =? "desktop_window" --> doIgnore
-    , resource  =? "kdesktop"       --> doIgnore
+    [ className =? "confirm"         --> doFloat
+    , className =? "file_progress"   --> doFloat
+    , className =? "dialog"          --> doFloat
+    , className =? "download"        --> doFloat
+    , className =? "error"           --> doFloat
+    , className =? "notification"    --> doFloat
+    , className =? "pinentry-gtk-2"  --> doFloat
+    , className =? "splash"          --> doFloat
+    , className =? "toolbar"         --> doFloat
     , className =? "Clearine" --> doFullFloat
     , className =? "Arcologout.py" --> doFullFloat
     , className =? "Evince" --> doFullFloat
     , className =? "Galculator" --> doCenterFloat
+    , className =? "Gpick" --> doCenterFloat
+    , className =? "Google-chrome" --> doShift  ( myWorkspaces !! 1 )
+    , className =? "Code" --> doShift  ( myWorkspaces !! 2 )
+    , className =? "Spotify" --> doShift  ( myWorkspaces !! 6 )
+    , className =? "discord" --> doShift  ( myWorkspaces !! 3 )
+    , className =? "Virt-manager" --> doShift  ( myWorkspaces !! 5 )
     , isDialog --> doCenterFloat
     ]
 ------------------------------------------------------------------------

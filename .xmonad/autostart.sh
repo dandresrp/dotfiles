@@ -24,7 +24,7 @@ setxkbmap us -variant altgr-intl &
 # Turn ON numlock key
 numlockx on &
 
-sleep 2 && trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 " ++ colorTrayer ++ " --height 22 &
 volumeicon &
+sleep 2 && stalonetray &
 #dropbox &
 #discord --start-minimized &
