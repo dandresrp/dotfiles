@@ -127,7 +127,8 @@ myKeys = [
 
     -- XMonad
     , ("M-S-q", io (exitWith ExitSuccess)) -- Quit XMonad
-    , ("M-q", spawn "xmonad --recompile; killall xmobar; xmonad --restart") -- Restart XMonad
+    --, ("M-q", spawn "xmonad --recompile; killall xmobar; xmonad --restart") -- Restart XMonad
+    , ("M-q", spawn "xmonad --recompile; xmonad --restart") -- Restart XMonad
     ]
 
 ------------------------------------------------------------------------
@@ -160,7 +161,7 @@ myLayout =  mouseResize $ windowArrange $ avoidStruts (tiled ||| smartBorders Fu
 ------------------------------------------------------------------------
 -- Workspaces
 
-myWorkspaces = ["sys","web","code","chat","doc","virt","mus","vid","gfx"]
+myWorkspaces = ["web","code","sys","chat","docs","mus","vid","gfx","virt"]
 myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..]
 
 clickable ws = "<action=xdotool key super+"++show i++">"++ws++"</action>"
@@ -192,11 +193,10 @@ myManageHook = composeAll
     , className =? "Evince" --> doFullFloat
     , className =? "Galculator" --> doCenterFloat
     , className =? "Gpick" --> doCenterFloat
-    , className =? "Google-chrome" --> doShift  ( myWorkspaces !! 1 )
-    , className =? "Code" --> doShift  ( myWorkspaces !! 2 )
-    , className =? "Spotify" --> doShift  ( myWorkspaces !! 6 )
+    , className =? "Google-chrome" --> doShift  ( myWorkspaces !! 0 )
+    , className =? "Code" --> doShift  ( myWorkspaces !! 1 )
     , className =? "discord" --> doShift  ( myWorkspaces !! 3 )
-    , className =? "Virt-manager" --> doShift  ( myWorkspaces !! 5 )
+    , className =? "Virt-manager" --> doShift  ( myWorkspaces !! 8 )
     , isDialog --> doCenterFloat
     ]
 ------------------------------------------------------------------------

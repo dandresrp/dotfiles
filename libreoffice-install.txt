@@ -1,0 +1,11 @@
+libreoffice-fresh
+libreoffice-fresh-es
+hunspell
+hunspell-es_es
+hunspell-es_any
+hunspell-es_hn
+hunspell-es_mx
+hyphen
+hyphen-es
+mythes-es
+languagetool

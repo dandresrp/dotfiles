@@ -1,1 +1,0 @@
-/home/dandresrp/.local/share/omf/themes/pastfish/fish_prompt.fish

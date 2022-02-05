@@ -5,17 +5,75 @@ add_newline = false
 [line_break]
 disabled = true 
 
-[character]
-success_symbol = "[➜](bold green)"
-error_symbol = "[➜](bold red)"
+[aws]
+symbol = "  "
+
+[conda]
+symbol = " "
+
+[dart]
+symbol = " "
 
 [directory]
 truncation_length = 1
-format = "[$path]($style)[$lock_symbol]($lock_style) "
+read_only = " "
 
-[cmd_duration]
-disabled = true
+[docker_context]
+symbol = " "
 
-# Disable the package module, hiding it from the prompt completely
+[elixir]
+symbol = " "
+
+[elm]
+symbol = " "
+
+[git_branch]
+symbol = " "
+
+[golang]
+symbol = " "
+
+[hg_branch]
+symbol = " "
+
+[java]
+symbol = " "
+
+[julia]
+symbol = " "
+
+[memory_usage]
+symbol = " "
+
+[nim]
+symbol = " "
+
+[nix_shell]
+symbol = " "
+
 [package]
-disabled = true
+symbol = " "
+
+[perl]
+symbol = " "
+
+[php]
+symbol = " "
+
+[python]
+symbol = " "
+
+[ruby]
+symbol = " "
+
+[rust]
+symbol = " "
+
+[scala]
+symbol = " "
+
+[shlvl]
+symbol = " "
+
+[swift]
+symbol = "ﯣ "

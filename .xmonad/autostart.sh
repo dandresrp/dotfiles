@@ -23,8 +23,3 @@ setxkbmap us -variant altgr-intl &
 
 # Turn ON numlock key
 numlockx on &
-
-volumeicon &
-sleep 2 && stalonetray &
-#dropbox &
-#discord --start-minimized &
