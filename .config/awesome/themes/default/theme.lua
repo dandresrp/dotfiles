@@ -11,7 +11,7 @@ local themes_path = gfs.get_themes_dir()
 
 local theme = {}
 
-theme.font          = "sans 8"
+theme.font          = "Ubuntu Regular 9"
 
 theme.bg_normal     = "#222222"
 theme.bg_focus      = "#535d6c"
@@ -25,7 +25,7 @@ theme.fg_urgent     = "#ffffff"
 theme.fg_minimize   = "#ffffff"
 
 theme.useless_gap   = dpi(4)
-theme.border_width  = dpi(2)
+theme.border_width  = dpi(1)
 theme.border_normal = "#000000"
 theme.border_focus  = "#535d6c"
 theme.border_marked = "#91231c"
@@ -57,6 +57,12 @@ theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(
 -- notification_[bg|fg]
 -- notification_[width|height|margin]
 -- notification_[border_color|border_width|shape|opacity]
+
+-- Notifications
+theme.notification_icon_size = dpi(80)
+
+-- Tasklist
+theme.tasklist_align = 'center'
 
 -- Variables set for theming the menu:
 -- menu_[bg|fg]_[normal|focus]
