@@ -1,5 +1,0 @@
-sudo pacman -D --asdeps $(sudo pacman -Qqe)
-
-sudo pacman -D --asexplicit base linux linux-firmware vim git rust
-
-sudo pacman -Qtdq | sudo pacman -Rns -
