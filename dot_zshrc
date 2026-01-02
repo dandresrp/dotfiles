@@ -1,0 +1,28 @@
+export ZSH="$HOME/.oh-my-zsh"
+export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
+export GHOSTTY="$HOME/.config/ghostty/config"
+export NVIM="$HOME/.config/nvim/"
+
+[[ -f /Users/dandresrp/.dart-cli-completion/zsh-config.zsh ]] && . /Users/dandresrp/.dart-cli-completion/zsh-config.zsh || true
+
+export PNPM_HOME="/Users/dandresrp/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
+plugins=(zsh-autosuggestions zsh-syntax-highlighting zsh-interactive-cd mise starship zoxide)
+
+source $ZSH/oh-my-zsh.sh
+
+alias cd="z"
+alias ls="eza --long --group-directories-first --icons"
+alias fc="flutter clean && flutter pub get"
+alias brb="dart run build_runner build -d"
+alias brw="dart run build_runner watch -d"
+alias ssh-crump="gcloud compute ssh --zone "us-central1-c" "instance-20250311-154224" --tunnel-through-iap --project "crump-crm-app" -- -L 3306:69.167.137.58:3306"
+alias tks="tmux kill-session -t"
+alias tls="tmux list-sessions"
+alias vim="nvim"
