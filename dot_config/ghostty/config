@@ -1,0 +1,5 @@
+font-family = FiraCode Nerd Font Mono 
+font-size = 14.0
+font-feature = -calt, -liga, -dlig
+macos-option-as-alt = true
+theme = tokyonight
