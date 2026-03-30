@@ -1,3 +1,29 @@
+# PATH Configuration
+export PNPM_HOME="/home/dandresrp/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
+# Environment Variables
+export EDITOR='nvim'
+export VISUAL='nvim'
+export PAGER='less'
+
+export LESS_TERMCAP_mb=$'\E[1;31m'
+export LESS_TERMCAP_md=$'\E[1;36m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[1;32m'
+
+export KEYTIMEOUT=1
+
+# Helper Functions
+_is_macos() { [[ "$OSTYPE" == "darwin"* ]]; }
+
+# History Configuration
 HISTFILE=~/.histfile
 HISTSIZE=10000
 SAVEHIST=10000
@@ -6,9 +32,19 @@ setopt HIST_IGNORE_SPACE
 setopt APPEND_HISTORY
 setopt SHARE_HISTORY
 
-bindkey -v
-export KEYTIMEOUT=1
+# Shell Options
+setopt AUTO_PUSHD
+setopt PUSHD_IGNORE_DUPS
+setopt PUSHD_SILENT
+setopt AUTO_CD
+setopt EXTENDED_GLOB
+setopt NO_BEEP
+setopt CORRECT
 
+# Key Bindings
+bindkey -v
+
+# Completion
 zstyle :compinstall filename '/home/dandresrp/.zshrc'
 autoload -Uz compinit
 if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
@@ -17,8 +53,7 @@ else
     compinit -C
 fi
 
-eval "$(~/.local/bin/mise activate zsh)"
-
+# Plugin Manager (Zinit)
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
     print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
     command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
@@ -37,17 +72,20 @@ zinit light zsh-users/zsh-completions
 zinit ice wait lucid
 zinit light zsh-users/zsh-autosuggestions
 
-# zinit ice wait lucid
-# zinit light zsh-users/zsh-syntax-highlighting
-
 zinit ice wait lucid
 zinit light zdharma-continuum/fast-syntax-highlighting
 
 zinit ice wait lucid
 zinit light Aloxaf/fzf-tab
 
-eval "$(oh-my-posh init zsh)"
+# Tool Initializations
+(( $+commands[mise] )) && eval "$(mise activate zsh)"
+(( $+commands[oh-my-posh] )) && eval "$(oh-my-posh init zsh)"
+# (( $+commands[starship] )) && eval "$(starship init zsh)"
+(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
+(( $+commands[atuin] )) && eval "$(atuin init zsh)"
 
+# FZF Configuration
 if [[ -f /usr/share/fzf/shell/key-bindings.zsh ]]; then
     source /usr/share/fzf/shell/key-bindings.zsh
 fi
@@ -59,6 +97,10 @@ export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --preview "bat -
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git 2>/dev/null || find . -type f -not -path "*/\.*"'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
+# Navigation Aliases
+for index ({1..9}) alias "$index"="cd +${index}"; unset index
+
+# File Listing Aliases
 if (( $+commands[eza] )); then
     alias ls='eza --group-directories-first'
     alias l='eza --group-directories-first'
@@ -67,17 +109,18 @@ if (( $+commands[eza] )); then
     alias lla='eza -la --group-directories-first'
     alias lt='eza -T --group-directories-first'
     alias lta='eza -Ta --group-directories-first'
-    
     alias lg='eza -l --git --git-ignore --group-directories-first'
     alias lga='eza -la --git --group-directories-first'
     alias lsize='eza -l --sort=size --group-directories-first --reverse'
     alias lmod='eza -l --sort=modified --group-directories-first --reverse'
 fi
 
+# File Viewing Aliases
 if (( $+commands[bat] )); then
     alias cat='bat --style=plain --paging=never'
 fi
 
+# Git Aliases
 if (( $+commands[git] )); then
     alias g='git'
     alias gs='git status'
@@ -91,6 +134,7 @@ if (( $+commands[git] )); then
     alias gb='git branch'
 fi
 
+# Package Manager Aliases
 if (( $+commands[dnf] )); then
     alias dnfs='dnf search'
     alias dnfi='sudo dnf install'
@@ -100,36 +144,38 @@ if (( $+commands[dnf] )); then
     alias dnfl='dnf list installed'
 fi
 
-alias reload='source ~/.zshrc'
-alias zshconfig='${EDITOR:-nano} ~/.zshrc'
+if _is_macos && (( $+commands[brew] )); then
+    alias update="brew upgrade"
+    if (( $+commands[mo] )); then
+        alias cleanup="brew cleanup && mise prune && mo clean"
+    else
+        alias cleanup="brew cleanup && mise prune"
+    fi
+fi
 
+# Development Aliases
+if (( $+commands[flutter] )) && (( $+commands[dart] )); then
+    alias fc="flutter clean && flutter pub get"
+    alias brb="dart run build_runner build -d"
+    alias brw="dart run build_runner watch -d"
+fi
+
+# Tmux Aliases
+if (( $+commands[tmux] )); then
+    alias tks="tmux kill-session -t"
+    alias tls="tmux list-sessions"
+fi
+
+# Safety Aliases
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 
-export EDITOR='nvim'
-export VISUAL='nvim'
-export PAGER='less'
+# Utility Aliases
+alias reload='source ~/.zshrc'
+alias zshconfig='${EDITOR:-nano} ~/.zshrc'
 
-export LESS_TERMCAP_mb=$'\E[1;31m'
-export LESS_TERMCAP_md=$'\E[1;36m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[01;44;33m'
-export LESS_TERMCAP_ue=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[1;32m'
-
-setopt AUTO_PUSHD
-setopt PUSHD_IGNORE_DUPS
-setopt PUSHD_SILENT
-
-for index ({1..9}) alias "$index"="cd +${index}"; unset index
-
-setopt AUTO_CD
-setopt EXTENDED_GLOB
-setopt NO_BEEP
-setopt CORRECT
-
+# Functions
 extract() {
     if [[ -f $1 ]]; then
         case $1 in
@@ -151,17 +197,3 @@ extract() {
         echo "'$1' is not a valid file."
     fi
 }
-
-export PNPM_HOME="/home/dandresrp/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-
-if (( $+commands[zoxide] )); then
-    eval "$(zoxide init zsh)"
-fi
-
-if (( $+commands[atuin] )); then
-    eval "$(atuin init zsh)"
-fi
