@@ -1,0 +1,3 @@
+add_newline = false
+scan_timeout = 100
+follow_symlinks = false

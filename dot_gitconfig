@@ -1,0 +1,28 @@
+[user]
+	name = Diego Rios
+	email = darp_0703@outlook.com
+[core]
+	editor = nvim
+	pager = delta
+[init]
+	defaultBranch = main
+[color]
+	ui = auto
+[pull]
+	rebase = false
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[include]
+	path = ~/.config/delta/catppuccin.gitconfig
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	features = catppuccin-mocha
+	navigate = true
+	side-by-side = false
+	line-numbers = true
+[merge]
+	conflictStyle = zdiff3
