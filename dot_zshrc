@@ -76,7 +76,8 @@ zinit light Aloxaf/fzf-tab
 
 # Tool Initializations
 (( $+commands[mise] )) && eval "$(mise activate zsh)"
-(( $+commands[starship] )) && eval "$(starship init zsh)"
+# (( $+commands[starship] )) && eval "$(starship init zsh)"
+(( $+commands[oh-my-posh] )) && eval "$(oh-my-posh init zsh)"
 
 # Zoxide with FZF integration
 (( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
