@@ -77,7 +77,7 @@ zinit light Aloxaf/fzf-tab
 # Tool Initializations
 (( $+commands[mise] )) && eval "$(mise activate zsh)"
 # (( $+commands[starship] )) && eval "$(starship init zsh)"
-(( $+commands[oh-my-posh] )) && eval "$(oh-my-posh init zsh)"
+(( $+commands[oh-my-posh] )) && eval "$(oh-my-posh init zsh --config ~/.oh-my-posh/dandresrp.omp.json)"
 
 # Zoxide with FZF integration
 (( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
@@ -185,11 +185,6 @@ if (( $+commands[tmux] )); then
     alias tks="tmux kill-session -t"
     alias tls="tmux list-sessions"
 fi
-
-# Safety Aliases
-alias rm='rm -i'
-alias cp='cp -i'
-alias mv='mv -i'
 
 # Utility Aliases
 alias reload='source ~/.zshrc'
