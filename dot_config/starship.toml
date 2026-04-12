@@ -1,3 +1,13 @@
-add_newline = false
-scan_timeout = 100
-follow_symlinks = false
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = "[$directory$git_branch$git_status]($style)$character"
+
+right_format = "[$cmd_duration$time]($style)"
+
+directory = { truncation_length = 2 }
+
+character.error_symbol = "[✗](bold red)"
+
+git_branch = { style = "bold italic purple" }
+
+time = { disabled = false, format = "[$time]($style)", style = "dimmed" }
