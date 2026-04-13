@@ -6,8 +6,8 @@ right_format = "[$cmd_duration$time]($style)"
 
 directory = { truncation_length = 2 }
 
-character.error_symbol = "[✗](bold red)"
+character = { success_symbol = "[>](bold green)", error_symbol = "[✗](bold red)" }
 
-git_branch = { style = "bold italic purple" }
+cmd_duration = { min_time = 500, format = "[$duration](dimmed yellow)" }
 
 time = { disabled = false, format = "[$time]($style)", style = "dimmed" }
