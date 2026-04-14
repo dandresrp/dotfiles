@@ -44,17 +44,6 @@ setopt INTERACTIVE_COMMENTS
 # Key Bindings
 bindkey -e
 
-# Completion
-zstyle :compinstall filename "$HOME/.zshrc"
-zstyle ':completion:*' menu select
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-ZSH_COMPDUMP="$XDG_CACHE_HOME/zcompdump-${ZSH_VERSION}"
-autoload -Uz compinit
-if [[ -n $ZSH_COMPDUMP(#qN.mh+24) ]]; then
-    compinit -d "$ZSH_COMPDUMP"
-else
-    compinit -C -d "$ZSH_COMPDUMP"
-fi
 
 # Plugin Manager (Zinit)
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
@@ -72,11 +61,25 @@ autoload -Uz _zinit
 zinit ice blockf
 zinit light zsh-users/zsh-completions
 
-zinit ice wait lucid
-zinit light zsh-users/zsh-autosuggestions
+# Completion
+zstyle :compinstall filename "$HOME/.zshrc"
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+ZSH_COMPDUMP="$XDG_CACHE_HOME/zcompdump-${ZSH_VERSION}"
+autoload -Uz compinit
+if [[ -n $ZSH_COMPDUMP(#qN.mh+24) ]]; then
+    compinit -d "$ZSH_COMPDUMP"
+else
+    compinit -C -d "$ZSH_COMPDUMP"
+fi
 
 zinit ice wait lucid
 zinit light Aloxaf/fzf-tab
+
+zstyle ':fzf-tab:*' fzf-flags --color 'bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8,fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC,marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8,selected-bg:#45475A,border:#6C7086,label:#CDD6F4'
+
+zinit ice wait lucid
+zinit light zsh-users/zsh-autosuggestions
 
 zinit ice wait lucid
 zinit light zsh-users/zsh-syntax-highlighting
@@ -90,7 +93,7 @@ fi
 # (( $+commands[oh-my-posh] )) && eval "$(oh-my-posh init zsh --config ~/.oh-my-posh/dandresrp.omp.json)"
 
 if (( $+commands[bat] )); then
-    export FZF_PREVIEW_FILE='bat --color=always --style=numbers --line-range=:500 {}'
+    export FZF_PREVIEW_FILE='bat --color=always --style=numbers {}'
 else
     export FZF_PREVIEW_FILE='less -FR {}'
 fi
@@ -106,7 +109,6 @@ fi
 # Zoxide with FZF integration
 (( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
 export _ZO_FZF_OPTS="
-  --height 40%
   --layout=reverse
   --border
   --preview '$FZF_PREVIEW_DIR'
@@ -121,13 +123,13 @@ if (( $+commands[fzf] )); then
 fi
 
 export FZF_DEFAULT_OPTS="
-  --height 40%
   --layout=reverse
   --border
   --preview '$FZF_PREVIEW_FILE'
   --bind 'ctrl-/:change-preview-window(down|hidden|)'
   --bind 'ctrl-u:preview-page-up'
   --bind 'ctrl-d:preview-page-down'
+  --color 'bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8,fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC,marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8,selected-bg:#45475A,border:#6C7086,label:#CDD6F4'
 "
 
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --strip-cwd-prefix'
@@ -177,16 +179,6 @@ if (( $+commands[git] )); then
     alias gb='git branch'
     alias gr='git restore'
     alias grs='git restore --staged'
-fi
-
-# Package Manager Aliases
-if (( $+commands[dnf] )); then
-    alias dnfs='dnf search'
-    alias dnfi='sudo dnf install'
-    alias dnfu='sudo dnf upgrade'
-    alias dnfr='sudo dnf remove'
-    alias dnfh='dnf history'
-    alias dnfl='dnf list installed'
 fi
 
 if _is_macos && (( $+commands[brew] )); then

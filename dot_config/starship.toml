@@ -8,6 +8,4 @@ directory = { truncation_length = 2 }
 
 character = { success_symbol = "[>](bold green)", error_symbol = "[✗](bold red)" }
 
-cmd_duration = { min_time = 500, format = "[$duration](dimmed yellow)" }
-
 time = { disabled = false, format = "[$time]($style)", style = "dimmed" }
