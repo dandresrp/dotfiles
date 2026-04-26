@@ -1,28 +1,11 @@
-# Interactive shell configuration.
-export EDITOR='nvim'
-export VISUAL='nvim'
-export PAGER='less'
-
-export LESS_TERMCAP_mb=$'\E[1;31m'
-export LESS_TERMCAP_md=$'\E[1;36m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[01;44;33m'
-export LESS_TERMCAP_ue=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[1;32m'
-
-# Avoid splitting ESC-based key sequences (arrow keys, Alt combos, etc.).
 export KEYTIMEOUT=20
 
-# Helper Functions
 _is_macos() { [[ "$OSTYPE" == "darwin"* ]]; }
 
-# History Configuration
-mkdir -p "$XDG_STATE_HOME"
 HISTFILE="$XDG_STATE_HOME/zsh_history"
+mkdir -p "${HISTFILE:h}"
 HISTSIZE=50000
 SAVEHIST=50000
-setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_IGNORE_SPACE
 setopt HIST_FIND_NO_DUPS
@@ -32,7 +15,6 @@ setopt INC_APPEND_HISTORY
 setopt EXTENDED_HISTORY
 setopt HIST_EXPIRE_DUPS_FIRST
 
-# Shell Options
 setopt AUTO_PUSHD
 setopt PUSHD_IGNORE_DUPS
 setopt PUSHD_SILENT
@@ -41,30 +23,49 @@ setopt EXTENDED_GLOB
 setopt NO_BEEP
 setopt INTERACTIVE_COMMENTS
 
-# Key Bindings
 bindkey -e
 
+ZINIT_HOME="$HOME/.local/share/zinit/zinit.git"
 
-# Plugin Manager (Zinit)
-if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
-    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
-    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
-        print -P "%F{33} %F{34}Installation successful.%f%b" || \
-        print -P "%F{160} The clone has failed.%f%b"
-fi
+_bootstrap_zinit() {
+    [[ -f "$ZINIT_HOME/zinit.zsh" ]] && return
 
-source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})...%f"
+    command mkdir -p "${ZINIT_HOME:h}" && command chmod g-rwX "${ZINIT_HOME:h}" \
+        && command git clone https://github.com/zdharma-continuum/zinit "$ZINIT_HOME" \
+        && print -P "%F{33} %F{34}Installation successful.%f%b" \
+        || print -P "%F{160} The clone has failed.%f%b"
+}
+
+_bootstrap_zinit
+unset -f _bootstrap_zinit
+
+source "$ZINIT_HOME/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
-zinit ice blockf
+zinit ice blockf atpull'zinit creinstall -q .'
 zinit light zsh-users/zsh-completions
 
-# Completion
-zstyle :compinstall filename "$HOME/.zshrc"
-zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' menu no
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' squeeze-slashes true
+zstyle ':completion:*' list-packed false
+zstyle ':completion:*' list-rows-first false
+zstyle ':completion:*:descriptions' format '[%d]'
+if [[ -z ${LS_COLORS:-} ]]; then
+    eval "$(dircolors -b)"
+fi
+if [[ -n ${LS_COLORS:-} ]]; then
+    zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+fi
+export FZF_CATPPUCCIN_MOCHA="--color=bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8 --color=fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC --color=marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8 --color=selected-bg:#45475A --color=border:#6C7086,label:#CDD6F4"
+zstyle ':fzf-tab:*' fzf-flags --height=40% --layout=reverse --border --bind=tab:down --bind=btab:up ${(z)FZF_CATPPUCCIN_MOCHA}
+zstyle ':fzf-tab:*' switch-group '<' '>'
+zstyle ':fzf-tab:*' show-group quiet
+zstyle ':fzf-tab:*' query-string input
+zstyle ':fzf-tab:complete:*:*' fzf-preview 'if [[ -n $realpath && -d $realpath ]]; then eza --tree --level=2 --color=always --icons=always "$realpath"; elif [[ -n $realpath && -f $realpath ]]; then bat --color=always --style=numbers --line-range=:500 "$realpath"; fi'
 ZSH_COMPDUMP="$XDG_CACHE_HOME/zcompdump-${ZSH_VERSION}"
 autoload -Uz compinit
 if [[ -n $ZSH_COMPDUMP(#qN.mh+24) ]]; then
@@ -73,172 +74,76 @@ else
     compinit -C -d "$ZSH_COMPDUMP"
 fi
 
-zinit ice wait lucid
-zinit light Aloxaf/fzf-tab
+eval "$(mise activate zsh)"
 
-zstyle ':fzf-tab:*' fzf-flags --color 'bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8,fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC,marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8,selected-bg:#45475A,border:#6C7086,label:#CDD6F4'
+OMP_THEME="$XDG_CONFIG_HOME/oh-my-posh/jandedobbeleer.omp.json"
+[[ -f "$OMP_THEME" ]] && eval "$(oh-my-posh init zsh --config "$OMP_THEME")"
 
-zinit ice wait lucid
-zinit light zsh-users/zsh-autosuggestions
+export FZF_PREVIEW_FILE='bat --color=always --style=numbers --line-range=:500 {}'
 
-zinit ice wait lucid
-zinit light zsh-users/zsh-syntax-highlighting
+export FZF_PREVIEW_DIR='eza --tree --level=2 --color=always --icons=always {}'
 
-# Tool Initializations
-if (( $+commands[mise] )); then
-    eval "$(mise activate zsh)"
-fi
-
-(( $+commands[starship] )) && eval "$(starship init zsh)"
-# (( $+commands[oh-my-posh] )) && eval "$(oh-my-posh init zsh --config ~/.oh-my-posh/dandresrp.omp.json)"
-
-if (( $+commands[bat] )); then
-    export FZF_PREVIEW_FILE='bat --color=always --style=numbers {}'
-else
-    export FZF_PREVIEW_FILE='less -FR {}'
-fi
-
-if (( $+commands[eza] )); then
-    export FZF_PREVIEW_DIR='eza --tree --color=always {} | head -200'
-elif (( $+commands[tree] )); then
-    export FZF_PREVIEW_DIR='tree -C {} | head -200'
-else
-    export FZF_PREVIEW_DIR='ls -la {}'
-fi
-
-# Zoxide with FZF integration
-(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
-export _ZO_FZF_OPTS="
-  --layout=reverse
-  --border
-  --preview '$FZF_PREVIEW_DIR'
-"
-export _ZO_ECHO=1
-
-(( $+commands[atuin] )) && eval "$(atuin init zsh)"
-
-# FZF Configuration - macOS Homebrew
-if (( $+commands[fzf] )); then
-    source <(fzf --zsh)
-fi
-
-export FZF_DEFAULT_OPTS="
-  --layout=reverse
-  --border
+export FZF_DEFAULT_OPTS="--layout=reverse --border $FZF_CATPPUCCIN_MOCHA"
+export FZF_CTRL_R_COMMAND=
+export FZF_CTRL_T_OPTS="
   --preview '$FZF_PREVIEW_FILE'
   --bind 'ctrl-/:change-preview-window(down|hidden|)'
   --bind 'ctrl-u:preview-page-up'
   --bind 'ctrl-d:preview-page-down'
-  --color 'bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8,fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC,marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8,selected-bg:#45475A,border:#6C7086,label:#CDD6F4'
 "
-
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --strip-cwd-prefix'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_CTRL_T_OPTS="
-  --walker-skip .git,node_modules,target
-  --preview '$FZF_PREVIEW_FILE'
-  --bind 'ctrl-/:change-preview-window(down|hidden|)'
-"
-export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git --strip-cwd-prefix'
 export FZF_ALT_C_OPTS="
-  --walker-skip .git,node_modules,target
   --preview '$FZF_PREVIEW_DIR'
+  --bind 'ctrl-/:change-preview-window(down|hidden|)'
+  --bind 'ctrl-u:preview-page-up'
+  --bind 'ctrl-d:preview-page-down'
 "
-
-# Navigation Aliases
-for index ({1..9}) alias "$index"="cd +${index}"; unset index
-
-# File Listing Aliases
-if (( $+commands[eza] )); then
-    alias ls='eza -l --group-directories-first --icons=always'
-    alias lsa='eza -la --group-directories-first --icons=always'
-    alias lt='eza -T --group-directories-first --icons=always'
-    alias lta='eza -Ta --group-directories-first --icons=always'
-    alias lsize='eza -l --sort=size --group-directories-first --reverse --icons=always'
-    alias lmod='eza -l --sort=modified --group-directories-first --reverse --icons=always'
+if (( $+commands[fzf] )) && [[ -t 0 && -t 1 ]]; then
+    source <(fzf --zsh)
+    zinit light Aloxaf/fzf-tab
 fi
 
-# File Viewing Aliases
-if (( $+commands[bat] )); then
-    alias ccat='bat --style=plain --paging=never'
-fi
+export _ZO_FZF_OPTS="
+  --preview '$FZF_PREVIEW_DIR'
+  --bind 'ctrl-/:change-preview-window(down|hidden|)'
+  --bind 'ctrl-u:preview-page-up'
+  --bind 'ctrl-d:preview-page-down'
+"
+export _ZO_ECHO=1
+eval "$(zoxide init zsh)"
 
-# Git Aliases
-if (( $+commands[git] )); then
-    alias g='git'
-    alias gs='git status'
-    alias ga='git add'
-    alias gc='git commit'
-    alias gp='git push'
-    alias gpl='git pull'
-    alias gl='git log --oneline --graph --decorate'
-    alias gd='git diff'
-    alias gco='git checkout'
-    alias gsw='git switch'
-    alias gswc='git switch -c'
-    alias gb='git branch'
-    alias gr='git restore'
-    alias grs='git restore --staged'
-fi
+eval "$(atuin init zsh)"
 
-if _is_macos && (( $+commands[brew] )); then
+zinit light zsh-users/zsh-autosuggestions
+
+alias ls='eza -l --group-directories-first --icons=always'
+alias lsa='eza -la --group-directories-first --icons=always'
+
+alias ccat='bat --style=plain --paging=never'
+
+alias g='git'
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git push'
+alias gpl='git pull'
+alias gl='git log --oneline --graph --decorate'
+alias gd='git diff'
+alias gco='git checkout'
+alias gsw='git switch'
+alias gswc='git switch -c'
+alias gb='git branch'
+alias gr='git restore'
+alias grs='git restore --staged'
+
+if _is_macos; then
     alias update="brew update && brew upgrade && brew upgrade --cask"
-    if (( $+commands[mo] )); then
-        alias cleanup="brew cleanup && mise prune && mo clean"
-    else
-        alias cleanup="brew cleanup && mise prune"
-    fi
+    alias cleanup="brew cleanup && mise prune && mo clean"
 fi
 
-# Development Aliases
-if (( $+commands[flutter] )) && (( $+commands[dart] )); then
-    alias fc="flutter clean && flutter pub get"
-    alias brb="dart run build_runner build -d"
-    alias brw="dart run build_runner watch -d"
-fi
+alias fc="flutter clean && flutter pub get"
+alias brb="dart run build_runner build -d"
+alias brw="dart run build_runner watch -d"
 
-# Tmux Aliases
-if (( $+commands[tmux] )); then
-    alias tks="tmux kill-session -t"
-    alias tls="tmux list-sessions"
-fi
-
-# Utility Aliases
 alias reload='source ~/.zshrc'
-alias zshconfig='${EDITOR:-nano} ~/.zshrc'
-alias zprofile='${EDITOR:-nano} ~/.zprofile'
-alias zshenv='${EDITOR:-nano} ~/.zshenv'
 
-# Functions
-extract() {
-    local file=$1
-
-    if [[ -z $file ]]; then
-        echo "usage: extract <archive>"
-        return 1
-    fi
-
-    if [[ ! -f $file ]]; then
-        echo "'$file' is not a valid file."
-        return 1
-    fi
-
-    case $file in
-        *.tar.bz2)   tar xjf "$file"    ;;
-        *.tar.gz)    tar xzf "$file"    ;;
-        *.tar.xz)    tar xJf "$file"    ;;
-        *.bz2)       bunzip2 "$file"    ;;
-        *.rar)       unrar x "$file"    ;;
-        *.gz)        gunzip "$file"     ;;
-        *.tar)       tar xf "$file"     ;;
-        *.tbz2)      tar xjf "$file"    ;;
-        *.tgz)       tar xzf "$file"    ;;
-        *.zip)       unzip "$file"      ;;
-        *.Z)         uncompress "$file" ;;
-        *.7z)        7z x "$file"       ;;
-        *)
-            echo "Can't extract '$file'..."
-            return 1
-            ;;
-    esac
-}
+zinit light zsh-users/zsh-syntax-highlighting
