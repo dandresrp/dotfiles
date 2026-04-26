@@ -76,8 +76,7 @@ fi
 
 eval "$(mise activate zsh)"
 
-OMP_THEME="$XDG_CONFIG_HOME/oh-my-posh/jandedobbeleer.omp.json"
-[[ -f "$OMP_THEME" ]] && eval "$(oh-my-posh init zsh --config "$OMP_THEME")"
+eval "$(oh-my-posh init zsh --config pure)"
 
 export FZF_PREVIEW_FILE='bat --color=always --style=numbers --line-range=:500 {}'
 
@@ -108,7 +107,7 @@ export _ZO_FZF_OPTS="
   --bind 'ctrl-u:preview-page-up'
   --bind 'ctrl-d:preview-page-down'
 "
-export _ZO_ECHO=1
+export _ZO_ECHO=0
 eval "$(zoxide init zsh)"
 
 eval "$(atuin init zsh)"
