@@ -34,14 +34,3 @@ keybinding:
     quit: q
     quit-alt1: <c-c>
     return: <esc>
-customCommands:
-  - key: "<c-g>"
-    context: "files"
-    description: "Commit with Codex"
-    prompts:
-      - type: "input"
-        title: "Commit message"
-        key: "Message"
-        initialValue: '{{ runCommand "lazygit-codex-commit-message" }}'
-    command: 'git commit -m {{ .Form.Message | quote }}'
-    output: log

@@ -26,3 +26,5 @@
 	line-numbers = true
 [merge]
 	conflictStyle = zdiff3
+[gitbutler]
+	aiOpenAIKeyOption = butlerAPI
