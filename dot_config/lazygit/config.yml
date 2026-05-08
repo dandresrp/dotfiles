@@ -7,34 +7,6 @@ gui:
   showBottomLine: true
   sidePanelWidth: 0.25
   language: en
-  theme:
-    activeBorderColor:
-      - '#89b4fa'
-      - bold
-    inactiveBorderColor:
-      - '#a6adc8'
-    searchingActiveBorderColor:
-      - '#f9e2af'
-    optionsTextColor:
-      - '#89b4fa'
-    selectedLineBgColor:
-      - '#313244'
-    inactiveViewSelectedLineBgColor:
-      - '#6c7086'
-    cherryPickedCommitFgColor:
-      - '#89b4fa'
-    cherryPickedCommitBgColor:
-      - '#45475a'
-    markedBaseCommitFgColor:
-      - '#89b4fa'
-    markedBaseCommitBgColor:
-      - '#f9e2af'
-    unstagedChangesColor:
-      - '#f38ba8'
-    defaultFgColor:
-      - '#cdd6f4'
-  authorColors:
-    '*': '#b4befe'
 git:
   autoFetch: true
   autoRefresh: true
@@ -62,3 +34,14 @@ keybinding:
     quit: q
     quit-alt1: <c-c>
     return: <esc>
+customCommands:
+  - key: "<c-g>"
+    context: "files"
+    description: "Commit with Codex"
+    prompts:
+      - type: "input"
+        title: "Commit message"
+        key: "Message"
+        initialValue: '{{ runCommand "lazygit-codex-commit-message" }}'
+    command: 'git commit -m {{ .Form.Message | quote }}'
+    output: log
