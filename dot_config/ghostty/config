@@ -1,8 +1,8 @@
-font-family = JetBrainsMono Nerd Font Mono 
+font-family = CaskaydiaCove Nerd Font Mono 
 font-size = 16.0
 font-feature = -calt, -liga, -dlig
 macos-option-as-alt = true
-theme = Catppuccin Mocha
+theme = tokyonight
 
 window-padding-x = 16
 
