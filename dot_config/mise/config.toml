@@ -1,9 +1,0 @@
-[tools]
-"asdf:mise-plugins/mise-flutter" = "3.41.7-stable"
-gemini = "0.38"
-go = "1.26"
-java = "temurin-26"
-node = "25"
-pnpm = "latest"
-python = "3.14"
-uv = "0.11"

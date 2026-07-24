@@ -76,8 +76,6 @@ else
     compinit -C -d "$ZSH_COMPDUMP"
 fi
 
-eval "$(mise activate zsh)"
-
 eval "$(oh-my-posh init zsh --config pure)"
 
 export FZF_PREVIEW_FILE='bat --color=always --style=numbers --line-range=:500 {}'
@@ -138,13 +136,92 @@ alias grs='git restore --staged'
 
 if _is_macos; then
     alias update="brew update && brew upgrade && brew upgrade --cask"
-    alias cleanup="brew cleanup && mise prune && mo clean"
+    alias cleanup="brew cleanup && mo clean"
 fi
 
 alias fc="flutter clean && flutter pub get"
-alias brb="dart run build_runner build -d"
-alias brw="dart run build_runner watch -d"
+alias brb="dart run build_runner build"
+alias brw="dart run build_runner watch"
 
 alias reload='source ~/.zshrc'
 
+_tmux_session_name() {
+    local name="${1:-${PWD:t}}"
+    name="${name//[^A-Za-z0-9_.-]/_}"
+    print -r -- "${name:-main}"
+}
+
+t() {
+    local name
+    name="$(_tmux_session_name "$1")"
+
+    if [[ -n "$TMUX" ]]; then
+        tmux switch-client -t "$name" 2>/dev/null || tmux new-session -ds "$name" -c "$PWD" \; switch-client -t "$name"
+    else
+        tmux new-session -A -s "$name" -c "$PWD"
+    fi
+}
+
+ta() {
+    local target
+    target=$(tmux list-sessions -F '#S' 2>/dev/null | fzf --prompt='tmux session > ')
+    [[ -z "$target" ]] && return
+
+    if [[ -n "$TMUX" ]]; then
+        tmux switch-client -t "$target"
+    else
+        tmux attach-session -t "$target"
+    fi
+}
+
+tl() {
+    tmux list-sessions -F '#S  #I windows  #{?session_attached,attached,detached}' 2>/dev/null
+}
+
+tk() {
+    local target answer
+    target=$(tmux list-sessions -F '#S' 2>/dev/null | fzf --prompt='kill tmux session > ')
+    [[ -z "$target" ]] && return
+
+    printf "Kill tmux session '%s'? [y/N] " "$target"
+    read -r answer
+    [[ "$answer" == [yY] ]] || return
+
+    tmux kill-session -t "$target"
+}
+
+tn() {
+    if [[ -z "$1" ]]; then
+        print "usage: tn <name>" >&2
+        return 2
+    fi
+
+    local name
+    name="$(_tmux_session_name "$1")"
+
+    if [[ -n "$TMUX" ]]; then
+        tmux switch-client -t "$name" 2>/dev/null || tmux new-session -ds "$name" -c "$PWD" \; switch-client -t "$name"
+    else
+        tmux new-session -A -s "$name" -c "$PWD"
+    fi
+}
+
 zinit light zsh-users/zsh-syntax-highlighting
+
+## [Completion]
+## Completion scripts setup. Remove the following line to uninstall
+[[ -f /Users/dandresrp/.config/.dart-cli-completion/zsh-config.zsh ]] && . /Users/dandresrp/.config/.dart-cli-completion/zsh-config.zsh || true
+## [/Completion]
+
+export PATH="/Users/dandresrp/.config/shorebird/bin:$PATH"
+
+# pnpm
+export PNPM_HOME="/Users/dandresrp/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+# pnpm end
+
+export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+export PATH="$JAVA_HOME/bin:$PATH"

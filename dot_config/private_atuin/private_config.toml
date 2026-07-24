@@ -108,7 +108,7 @@
 
 ## Show numeric shortcuts (1..9) beside list items in the TUI
 ## set to false to hide the moving numbers if you find them distracting
-# show_numeric_shortcuts = true
+show_numeric_shortcuts = false
 
 ## default history list format - can also be specified with the --format arg
 # history_format = "{time}\t{command}\t{duration}"
@@ -164,13 +164,16 @@
 ## whereas tab will put the command in the prompt for editing.
 ## If set to false, both enter and tab will place the command in the prompt for editing.
 ## This applies for new installs. Old installs will keep the old behaviour unless configured otherwise.
-search_mode = "fuzzy"
-filter_mode = "workspace"
-workspaces = true
-style = "compact"
-inline_height = 20
-show_preview = true
-enter_accept = true
+# search_mode = "fuzzy"
+# filter_mode = "global"
+# workspaces = true
+# style = "compact"
+# inline_height = 14
+# show_preview = true
+# enter_accept = false
+# show_help = false
+# filter_mode_shell_up_key_binding = "directory"
+# search_mode_shell_up_key_binding = "prefix"
 
 ## Defaults to false. If enabled, when triggered after &&, || or |, Atuin will complete commands to chain rather than replace the current line.
 # command_chaining = false
@@ -254,7 +257,7 @@ enter_accept = true
 # Enable sync v2 by default
 # This ensures that sync v2 is enabled for new installs only
 # In a later release it will become the default across the board
-records = true
+# records = true
 
 [preview]
 ## which preview strategy to use to calculate the preview height (respects max_preview_height).
@@ -312,7 +315,7 @@ records = true
 ## The list of enabled filter modes, in order of priority.
 ## The "workspace" mode is skipped when not in a workspace or workspaces = false.
 ## Default filter mode can be overridden with the filter_mode setting.
-filters = [ "workspace", "directory", "global", "host", "session" ]
+# filters = [ "workspace", "directory", "global", "host", "session" ]
 
 [tmux]
 ## Enable using atuin with tmux popup (requires tmux >= 3.2)
@@ -352,7 +355,7 @@ filters = [ "workspace", "directory", "global", "host", "session" ]
 ## column fill remaining space. Only one column should have expand = true.
 ##
 ## Default:
-# columns = ["duration", "time", "command"]
+# columns = ["time", "command"]
 ##
 ## Examples:
 ##

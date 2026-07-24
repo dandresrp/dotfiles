@@ -14,14 +14,12 @@ path=(/opt/homebrew/bin "$HOME/.linuxbrew/bin" /home/linuxbrew/.linuxbrew/bin /u
 
 if [[ "$OSTYPE" == darwin* ]]; then
     eval "$(brew shellenv)"
-    export PNPM_HOME="$HOME/Library/pnpm"
+
+    export ANDROID_HOME="$HOME/Library/Android/sdk"
+    export ANDROID_SDK_ROOT="$ANDROID_HOME"
+    path+=("$ANDROID_HOME/platform-tools" "$ANDROID_HOME/emulator" "$ANDROID_HOME/cmdline-tools/latest/bin")
 
     path+=("$HOME/Library/Application Support/JetBrains/Toolbox/scripts")
     source "$HOME/.orbstack/shell/init.zsh"
-else
-    export PNPM_HOME="$HOME/.local/share/pnpm"
 fi
 
-path=("$PNPM_HOME" $path)
-
-eval "$(mise activate zsh --shims)"
