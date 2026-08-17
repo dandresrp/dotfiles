@@ -1,227 +1,44 @@
-export KEYTIMEOUT=20
-
-_is_macos() { [[ "$OSTYPE" == "darwin"* ]]; }
-
 HISTFILE="$XDG_STATE_HOME/zsh_history"
 mkdir -p "${HISTFILE:h}"
 HISTSIZE=50000
 SAVEHIST=50000
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_IGNORE_SPACE
-setopt HIST_FIND_NO_DUPS
-setopt HIST_REDUCE_BLANKS
-setopt APPEND_HISTORY
-setopt INC_APPEND_HISTORY
-setopt EXTENDED_HISTORY
-setopt HIST_EXPIRE_DUPS_FIRST
-
-setopt AUTO_PUSHD
-setopt PUSHD_IGNORE_DUPS
-setopt PUSHD_SILENT
-setopt AUTO_CD
-setopt EXTENDED_GLOB
-setopt NO_BEEP
-setopt INTERACTIVE_COMMENTS
-
+setopt APPEND_HISTORY INC_APPEND_HISTORY EXTENDED_HISTORY
+setopt HIST_IGNORE_ALL_DUPS HIST_IGNORE_SPACE HIST_FIND_NO_DUPS
+setopt AUTO_CD AUTO_PUSHD PUSHD_IGNORE_DUPS PUSHD_SILENT NO_BEEP
 bindkey -e
 
-ZINIT_HOME="$HOME/.local/share/zinit/zinit.git"
+export ZSH="$HOME/.oh-my-zsh"
 
-_bootstrap_zinit() {
-    [[ -f "$ZINIT_HOME/zinit.zsh" ]] && return
+export FZF_DEFAULT_OPTS='--height=40% --layout=reverse --border'
+export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range=:500 {}'"
+export FZF_ALT_C_OPTS="--preview 'eza --tree --level=2 --color=always --icons=always {}'"
+zstyle ':omz:plugins:eza' dirs-first yes
+# zstyle ':omz:plugins:eza' icons yes
+zstyle ':omz:plugins:eza' show-group no
 
-    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})...%f"
-    command mkdir -p "${ZINIT_HOME:h}" && command chmod g-rwX "${ZINIT_HOME:h}" \
-        && command git clone https://github.com/zdharma-continuum/zinit "$ZINIT_HOME" \
-        && print -P "%F{33} %F{34}Installation successful.%f%b" \
-        || print -P "%F{160} The clone has failed.%f%b"
-}
+plugins=(
+  git
+  starship
+  fzf
+  zoxide
+  eza
+  colored-man-pages
+  zsh-completions
+  fzf-tab
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+)
 
-_bootstrap_zinit
-unset -f _bootstrap_zinit
-
-source "$ZINIT_HOME/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-
-zinit ice blockf atpull'zinit creinstall -q .'
-zinit light zsh-users/zsh-completions
+source "$ZSH/oh-my-zsh.sh"
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' menu no
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*' squeeze-slashes true
-zstyle ':completion:*' list-packed false
-zstyle ':completion:*' list-rows-first false
 zstyle ':completion:*:descriptions' format '[%d]'
-zstyle ':completion:*' list-colors \
-    'di=34' \
-    'ln=36' \
-    'so=32' \
-    'pi=33' \
-    'ex=32' \
-    'bd=33' \
-    'cd=33'
-export FZF_CATPPUCCIN_MOCHA="--color=bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8 --color=fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC --color=marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8 --color=selected-bg:#45475A --color=border:#6C7086,label:#CDD6F4"
-zstyle ':fzf-tab:*' fzf-flags --height=40% --layout=reverse --border --bind=tab:down --bind=btab:up ${(z)FZF_CATPPUCCIN_MOCHA}
+zstyle ':fzf-tab:*' fzf-flags --height=40% --layout=reverse --border
 zstyle ':fzf-tab:*' switch-group '<' '>'
-zstyle ':fzf-tab:*' show-group quiet
-zstyle ':fzf-tab:*' query-string input
-zstyle ':fzf-tab:complete:*:*' fzf-preview 'if [[ -n $realpath && -d $realpath ]]; then eza --tree --level=2 --color=always --icons=always "$realpath"; elif [[ -n $realpath && -f $realpath ]]; then bat --color=always --style=numbers --line-range=:500 "$realpath"; fi'
-ZSH_COMPDUMP="$XDG_CACHE_HOME/zcompdump-${ZSH_VERSION}"
-autoload -Uz compinit
-if [[ -n $ZSH_COMPDUMP(#qN.mh+24) ]]; then
-    compinit -d "$ZSH_COMPDUMP"
-else
-    compinit -C -d "$ZSH_COMPDUMP"
-fi
 
-eval "$(oh-my-posh init zsh --config pure)"
-
-export FZF_PREVIEW_FILE='bat --color=always --style=numbers --line-range=:500 {}'
-
-export FZF_PREVIEW_DIR='eza --tree --level=2 --color=always --icons=always {}'
-
-export FZF_DEFAULT_OPTS="--layout=reverse --border $FZF_CATPPUCCIN_MOCHA"
-export FZF_CTRL_R_COMMAND=
-export FZF_CTRL_T_OPTS="
-  --preview '$FZF_PREVIEW_FILE'
-  --bind 'ctrl-/:change-preview-window(down|hidden|)'
-  --bind 'ctrl-u:preview-page-up'
-  --bind 'ctrl-d:preview-page-down'
-"
-export FZF_ALT_C_OPTS="
-  --preview '$FZF_PREVIEW_DIR'
-  --bind 'ctrl-/:change-preview-window(down|hidden|)'
-  --bind 'ctrl-u:preview-page-up'
-  --bind 'ctrl-d:preview-page-down'
-"
-if (( $+commands[fzf] )) && [[ -t 0 && -t 1 ]]; then
-    source <(fzf --zsh)
-    zinit light Aloxaf/fzf-tab
-fi
-
-export _ZO_FZF_OPTS="
-  --preview '$FZF_PREVIEW_DIR'
-  --bind 'ctrl-/:change-preview-window(down|hidden|)'
-  --bind 'ctrl-u:preview-page-up'
-  --bind 'ctrl-d:preview-page-down'
-"
-export _ZO_ECHO=0
-eval "$(zoxide init zsh)"
-
-eval "$(atuin init zsh)"
-
-zinit light zsh-users/zsh-autosuggestions
-
-alias ls='eza -l --group-directories-first --icons=always'
-alias lsa='eza -la --group-directories-first --icons=always'
+command -v atuin >/dev/null && eval "$(atuin init zsh)"
 
 alias ccat='bat --style=plain --paging=never'
-
-alias g='git'
-alias gs='git status'
-alias ga='git add'
-alias gc='git commit'
-alias gp='git push'
-alias gpl='git pull'
-alias gl='git log --oneline --graph --decorate'
-alias gd='git diff'
-alias gco='git checkout'
-alias gsw='git switch'
-alias gswc='git switch -c'
-alias gb='git branch'
-alias gr='git restore'
-alias grs='git restore --staged'
-
-if _is_macos; then
-    alias update="brew update && brew upgrade && brew upgrade --cask"
-    alias cleanup="brew cleanup && mo clean"
-fi
-
-alias fc="flutter clean && flutter pub get"
-alias brb="dart run build_runner build"
-alias brw="dart run build_runner watch"
-
-alias reload='source ~/.zshrc'
-
-_tmux_session_name() {
-    local name="${1:-${PWD:t}}"
-    name="${name//[^A-Za-z0-9_.-]/_}"
-    print -r -- "${name:-main}"
-}
-
-t() {
-    local name
-    name="$(_tmux_session_name "$1")"
-
-    if [[ -n "$TMUX" ]]; then
-        tmux switch-client -t "$name" 2>/dev/null || tmux new-session -ds "$name" -c "$PWD" \; switch-client -t "$name"
-    else
-        tmux new-session -A -s "$name" -c "$PWD"
-    fi
-}
-
-ta() {
-    local target
-    target=$(tmux list-sessions -F '#S' 2>/dev/null | fzf --prompt='tmux session > ')
-    [[ -z "$target" ]] && return
-
-    if [[ -n "$TMUX" ]]; then
-        tmux switch-client -t "$target"
-    else
-        tmux attach-session -t "$target"
-    fi
-}
-
-tl() {
-    tmux list-sessions -F '#S  #I windows  #{?session_attached,attached,detached}' 2>/dev/null
-}
-
-tk() {
-    local target answer
-    target=$(tmux list-sessions -F '#S' 2>/dev/null | fzf --prompt='kill tmux session > ')
-    [[ -z "$target" ]] && return
-
-    printf "Kill tmux session '%s'? [y/N] " "$target"
-    read -r answer
-    [[ "$answer" == [yY] ]] || return
-
-    tmux kill-session -t "$target"
-}
-
-tn() {
-    if [[ -z "$1" ]]; then
-        print "usage: tn <name>" >&2
-        return 2
-    fi
-
-    local name
-    name="$(_tmux_session_name "$1")"
-
-    if [[ -n "$TMUX" ]]; then
-        tmux switch-client -t "$name" 2>/dev/null || tmux new-session -ds "$name" -c "$PWD" \; switch-client -t "$name"
-    else
-        tmux new-session -A -s "$name" -c "$PWD"
-    fi
-}
-
-zinit light zsh-users/zsh-syntax-highlighting
-
-## [Completion]
-## Completion scripts setup. Remove the following line to uninstall
-[[ -f /Users/dandresrp/.config/.dart-cli-completion/zsh-config.zsh ]] && . /Users/dandresrp/.config/.dart-cli-completion/zsh-config.zsh || true
-## [/Completion]
-
-export PATH="/Users/dandresrp/.config/shorebird/bin:$PATH"
-
-# pnpm
-export PNPM_HOME="/Users/dandresrp/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME/bin:"*) ;;
-  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
-esac
-# pnpm end
-
-export JAVA_HOME=$(/usr/libexec/java_home -v 17)
-export PATH="$JAVA_HOME/bin:$PATH"
+alias reload='source "$HOME/.zshrc"'
+[[ "$OSTYPE" == darwin* ]] && alias update='brew update && brew upgrade && brew upgrade --cask'

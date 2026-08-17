@@ -2,24 +2,17 @@ export EDITOR='nvim'
 export VISUAL="$EDITOR"
 export PAGER='less'
 
-export LESS_TERMCAP_mb=$'\E[1;31m'
-export LESS_TERMCAP_md=$'\E[1;36m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[01;44;33m'
-export LESS_TERMCAP_ue=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[1;32m'
-
-path=(/opt/homebrew/bin "$HOME/.linuxbrew/bin" /home/linuxbrew/.linuxbrew/bin /usr/local/bin $path)
-
 if [[ "$OSTYPE" == darwin* ]]; then
-    eval "$(brew shellenv)"
+  [[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+  path=("$HOME/.local/bin" $path)
 
-    export ANDROID_HOME="$HOME/Library/Android/sdk"
-    export ANDROID_SDK_ROOT="$ANDROID_HOME"
-    path+=("$ANDROID_HOME/platform-tools" "$ANDROID_HOME/emulator" "$ANDROID_HOME/cmdline-tools/latest/bin")
+  java_home=$(/usr/libexec/java_home -v 17 2>/dev/null)
+  if [[ -n "$java_home" ]]; then
+    export JAVA_HOME="$java_home"
+    path=("$JAVA_HOME/bin" $path)
+  fi
+  unset java_home
 
-    path+=("$HOME/Library/Application Support/JetBrains/Toolbox/scripts")
-    source "$HOME/.orbstack/shell/init.zsh"
+  [[ -d "$HOME/.lmstudio/bin" ]] && path+=("$HOME/.lmstudio/bin")
+  [[ -f "$HOME/.orbstack/shell/init.zsh" ]] && source "$HOME/.orbstack/shell/init.zsh"
 fi
-
