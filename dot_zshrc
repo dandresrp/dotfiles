@@ -18,6 +18,7 @@ zstyle ':omz:plugins:eza' show-group no
 
 plugins=(
   git
+  mise
   starship
   fzf
   zoxide
@@ -42,3 +43,14 @@ command -v atuin >/dev/null && eval "$(atuin init zsh)"
 alias ccat='bat --style=plain --paging=never'
 alias reload='source "$HOME/.zshrc"'
 [[ "$OSTYPE" == darwin* ]] && alias update='brew update && brew upgrade && brew upgrade --cask'
+
+# pnpm
+export PNPM_HOME='/Users/diego/Library/pnpm'
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+# pnpm end
+
+# opencode
+export PATH=/Users/diego/.opencode/bin:$PATH

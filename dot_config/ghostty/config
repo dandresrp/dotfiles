@@ -1,9 +1,21 @@
-font-family = FiraCode Nerd Font Mono 
-font-size = 16.0
-font-feature = -calt, -liga, -dlig
-macos-option-as-alt = true
-theme = tokyonight
+# Font and theme
+font-family = FiraCode Nerd Font Mono
+font-size = 16
+theme = light:TokyoNight Day,dark:TokyoNight
 
+# Readability and cursor
+minimum-contrast = 1.1
+cursor-style = block
+cursor-style-blink = false
+mouse-hide-while-typing = true
+
+# Window
 window-padding-x = 16
+window-padding-y = 10
+window-padding-balance = true
 
-shell-integration-features = ssh-env,ssh-terminfo
+# macOS: Make Option behave as Alt in terminal applications.
+macos-option-as-alt = true
+
+# Keep the standard features and improve SSH sessions.
+shell-integration-features = cursor,no-sudo,title,ssh-env,ssh-terminfo,path
